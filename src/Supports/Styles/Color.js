@@ -1,7 +1,7 @@
 const { StyleSheet } = require('react-native');
 
-const Primary = '#0064d2'
-const Secondary = '#ffdc02'
+const Primary = '#e84545'
+const Secondary = '#2b2e4a'
 const Light = '#f8f8f8'
 const Dark = '#505050'
 
