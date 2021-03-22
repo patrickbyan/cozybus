@@ -6,7 +6,7 @@ import Color from './../../Supports/Styles/Color'
 import Spacing from './../../Supports/Styles/Spacing'
 import Font from './../../Supports/Styles/Typography'
 
-const Login = () => {
+const Login = ({navigation: {navigate}}) => {
     return(
         <Container>
             <Content>
@@ -17,7 +17,7 @@ const Login = () => {
                         </Text>
                     </Row>
                     <Row style={{...Spacing.plFive, ...Spacing.ptFive}}>
-                        <Text style={{...Font.fsSeven, ...Font.fStyleBold}}>
+                        <Text style={{...Font.fsSeven, ...Font.fStyleBold, ...Color.primary}}>
                             Welcome!
                         </Text>
                     </Row>
@@ -44,14 +44,14 @@ const Login = () => {
                         </Text>
                     </Row>
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Button rounded style={{width: '100%'}}>
+                        <Button rounded style={{width: '100%', ...Color.bgPrimary}}>
                             <Text style={{textAlign: 'center', width: '100%'}}>
                                 Login
                             </Text>
                         </Button>
                     </Row>
                     <Row style={{justifyContent: 'center', ...Spacing.ptFive}}>
-                        <Text>
+                        <Text onPress={() => navigate('Register')}>
                             Don't have account? Sign Up
                         </Text>
                     </Row>

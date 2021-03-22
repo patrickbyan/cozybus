@@ -7,14 +7,17 @@
  */
 
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native'
 
-// Screens
-import Login from './src/Screens/Login/Login'
-import Register from './src/Screens/Register/Register'
+// Stack
+import RegisterRouter from './routes/RegisterRouter'
+import MainRouter from './routes/MainRouter'
 
 const App = () => {
   return(
-    <Register />
+    <NavigationContainer>
+      <RegisterRouter />
+    </NavigationContainer>
   )
 }
 

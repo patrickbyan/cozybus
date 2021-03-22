@@ -9,13 +9,13 @@ import Font from './../../Supports/Styles/Typography'
 // Icon
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-const Login = () => {
+const Register = ({navigation: {navigate}}) => {
     return(
         <Container>
             <Content>
                 <Grid style={{...Spacing.mtFive, alignItems: 'center'}}>
-                    <Col style={{...Spacing.plFive, width: '10%'}}>
-                        <Icon name='chevron-circle-left' style={{...Font.fsFive}} />
+                    <Col style={{...Spacing.plFive, width: '12%'}}>
+                        <Icon name='chevron-circle-left' onPress={() => navigate('Login')} style={{...Font.fsFive}} />
                     </Col>
                     <Col>
                         <Text style={{...Font.fsFive, ...Font.fStyleBold}}>
@@ -25,7 +25,7 @@ const Login = () => {
                 </Grid>
                 <Grid> 
                     <Row style={{...Spacing.plFive, ...Spacing.ptFive}}>
-                        <Text style={{...Font.fsSeven, ...Font.fStyleBold}}>
+                        <Text style={{...Font.fsSeven, ...Font.fStyleBold, ...Color.primary}}>
                             Welcome!
                         </Text>
                     </Row>
@@ -58,14 +58,14 @@ const Login = () => {
                         </Text>
                     </Row>
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Button rounded style={{width: '100%'}}>
+                        <Button rounded style={{width: '100%', ...Color.bgPrimary}}>
                             <Text style={{textAlign: 'center', width: '100%'}}>
                                 Register
                             </Text>
                         </Button>
                     </Row>
                     <Row style={{justifyContent: 'center', ...Spacing.ptFive}}>
-                        <Text>
+                        <Text onPress={() => navigate('Login')}>
                             Already have account? Login
                         </Text>
                     </Row>
@@ -75,4 +75,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Register
