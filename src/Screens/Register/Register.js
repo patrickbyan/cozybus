@@ -1,5 +1,5 @@
 import { Container, Content, Grid, Col, Row, Text, Item, Label, Input, Button } from 'native-base'
-import React from 'react'
+import React, { useState } from 'react'
 
 // Styles
 import Color from './../../Supports/Styles/Color'
@@ -10,6 +10,38 @@ import Font from './../../Supports/Styles/Typography'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 const Register = ({navigation: {navigate}}) => {
+
+    const [inputEmail, setInputEmail] = useState('')
+    const [inputPassword, setInputPassword] = useState('')
+    const [errorInput, setErrorInput] = useState('')
+
+    const onEmailValidation = (input) => {
+        console.log(input)
+        let regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
+        if(regex.test(input)){
+            setInputEmail(input)
+            setErrorInput('')
+        }else{
+            setErrorInput('Email Tidak Valid')
+        }
+    }
+
+    const onPasswordValidation = (input) => {
+        let symbol = /[!@#$%^&*]/
+
+        if(input.length < 6){
+            return setErrorInput('Password Minimal 6 Karakter')
+        }
+        
+        if(!symbol.test(input)){
+            return setErrorInput('Password Harus Mengandung Simbol')
+        }else{
+            setInputPassword(input)
+            setErrorInput('')
+        }
+    }
+
     return(
         <Container>
             <Content>
@@ -37,24 +69,23 @@ const Register = ({navigation: {navigate}}) => {
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
                         <Item floatingLabel style={{width: '100%'}}>
                             <Label>Enter Your Email</Label>
-                            <Input />
+                            <Input name='email' onChangeText={(input) => onEmailValidation(input)} />
                         </Item>
                     </Row>
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
                         <Item floatingLabel style={{width: '100%'}}>
                             <Label>Enter Your Password</Label>
-                            <Input />
-                        </Item>
-                    </Row>
-                    <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Item floatingLabel style={{width: '100%'}}>
-                            <Label>Enter Your Confirm Password</Label>
-                            <Input />
+                            <Input name='password' onChangeText={(input) => onPasswordValidation(input)} />
                         </Item>
                     </Row>
                     <Row style={{justifyContent: 'flex-end', ...Spacing.prFive}}>
                         <Text style={{color: 'blue'}}>
                             Forgot Password
+                        </Text>
+                    </Row>
+                    <Row style={{justifyContent: 'center', ...Spacing.prFive}}>
+                        <Text style={{color: 'red', fontStyle: 'italic'}}>
+                            {errorInput}
                         </Text>
                     </Row>
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
