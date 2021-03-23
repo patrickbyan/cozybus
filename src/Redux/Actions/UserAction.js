@@ -17,12 +17,18 @@ export const onUserRegister = (inputEmail, inputPassword) => {
             }else{
                 Axios.post(urlAPI + '/users', {email: inputEmail, password: inputPassword})
                 .then((response) => {
-                    dispatch(
-                        {
-                            type: 'REGISTER_SUCCESS',
-                            payload: response.data.id
-                        }
-                    )
+                    AsyncStorage.setItem('@id', (response.data.id).toString())
+                    .then((resAsyncStorage) => {
+                        dispatch(
+                            {
+                                type: 'REGISTER_SUCCESS',
+                                payload: response.data.id
+                            }
+                        )
+                    })
+                    .catch((errAsyncStorage) => {
+                        console.log(errAsyncStorage)
+                    })
                 })
                 .catch((error) => {
                     console.log(error)
@@ -32,5 +38,16 @@ export const onUserRegister = (inputEmail, inputPassword) => {
         .catch((err) => {
             console.log(err)
         })
+    }
+}
+
+export const onSaveAsyncStroage = (id) => {
+    return(dispatch) => {
+        dispatch(
+            {
+                type: 'REGISTER_SUCCESS',
+                payload: id
+            }
+        )
     }
 }

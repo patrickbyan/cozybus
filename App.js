@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native'
 
 // Stack
@@ -14,21 +14,46 @@ import RegisterRouter from './routes/RegisterRouter'
 import MainRouter from './routes/MainRouter'
 
 // Redux
-import {applyMiddleware, createStore} from 'redux'
-import {Provider} from 'react-redux'
-import thunk from 'redux-thunk'
-import allReducer from './src/Redux/Reducers/Index'
+import {connect} from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {onSaveAsyncStroage} from './src/Redux/Actions/UserAction'
 
-const store = createStore(allReducer, applyMiddleware(thunk))
+const App = ({user, onSaveAsyncStroage}) => {
 
-const App = () => {
+  useEffect(() => {
+    getAsyncStorageData()
+  }, [])
+
+  const getAsyncStorageData = () => {
+    AsyncStorage.getItem('@id')
+    .then((result) => {
+      onSaveAsyncStroage(result)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
   return(
-    <Provider store={store}>
-      <NavigationContainer>
-        <RegisterRouter />
-      </NavigationContainer>
-    </Provider>
+    <NavigationContainer>
+      {
+        user.id?
+          <MainRouter />
+        :
+          <RegisterRouter />
+       }
+    </NavigationContainer>
   )
 }
 
-export default App
+const mapDispatchToProps = {
+  onSaveAsyncStroage
+}
+
+const mapStateProps = (state) => {
+  return{
+    user: state.user
+  }
+}
+
+export default connect(mapStateProps, mapDispatchToProps)(App)
