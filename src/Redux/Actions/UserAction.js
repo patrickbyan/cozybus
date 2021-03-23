@@ -4,6 +4,12 @@ import {urlAPI} from './../../Supports/Constants/urlAPI'
 
 export const onUserRegister = (inputEmail, inputPassword) => {
     return(dispatch) => {
+
+        dispatch(
+            {
+                type: 'LOADING'
+            }
+        )
         
         Axios.get(urlAPI + `/users?email=${inputEmail}`)
         .then((res) => {
@@ -49,5 +55,21 @@ export const onSaveAsyncStroage = (id) => {
                 payload: id
             }
         )
+    }
+}
+
+export const onUserLogout = () => {
+    return(dispatch) => {
+        AsyncStorage.removeItem('@id')
+        .then((res) => {
+            dispatch(
+                {
+                    type: 'LOGOUT_SUCCESS',
+                }
+            )
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 }

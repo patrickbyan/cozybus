@@ -107,11 +107,20 @@ const Register = ({navigation: {navigate}, onUserRegister, user}) => {
                         </Text>
                     </Row>
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Button rounded onPress={submitRegister} style={{width: '100%', ...Color.bgPrimary}}>
-                            <Text style={{textAlign: 'center', width: '100%'}}>
-                                Register
-                            </Text>
-                        </Button>
+                        {
+                            user.loading?
+                                <Button disabled rounded onPress={submitRegister} style={{width: '100%', ...Color.bgPrimary}}>
+                                    <Text style={{textAlign: 'center', width: '100%'}}>
+                                        Submit Data
+                                    </Text>
+                                </Button>
+                            :
+                                <Button rounded onPress={submitRegister} style={{width: '100%', ...Color.bgPrimary}}>
+                                    <Text style={{textAlign: 'center', width: '100%'}}>
+                                        Register
+                                    </Text>
+                                </Button>                        
+                        }
                     </Row>
                     {/* <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
                         <Button rounded onPress={checkStore} style={{width: '100%', ...Color.bgPrimary}}>

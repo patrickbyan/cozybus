@@ -1,14 +1,27 @@
-import { Container, Text } from 'native-base'
 import React from 'react'
+import { Button, Container, Text } from 'native-base'
+import {connect} from 'react-redux'
 
-const Profile = () => {
+// Redux
+import {onUserLogout} from './../../Redux/Actions/UserAction'
+
+const Profile = ({onUserLogout}) => {
     return(
         <Container>
             <Text>
                 Ini Profile
             </Text>
+            <Button onPress={onUserLogout}>
+                <Text>
+                    Logout
+                </Text>
+            </Button>
         </Container>
     )
 }
 
-export default Profile
+const mapDispatchToProps = {
+    onUserLogout
+}
+
+export default connect('', mapDispatchToProps)(Profile)
