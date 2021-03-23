@@ -1,29 +1,46 @@
 import React from 'react'
-import { Button, Col, Content, Form, Grid, Input, Item, Label, Picker, Container } from 'native-base'
+import { Button, Col, Content, Form, Grid, Input, Item, Label, Picker, Container, Header, Left, Right, Body, Title } from 'native-base'
 import { View, Text } from 'react-native'
 import DatePicker from 'react-native-datepicker'
+import {connect} from 'react-redux'
 
 // Styles
 import spacing from './../../Supports/Styles/Spacing'
 import color from './../..//Supports/Styles/Color'
 
+// Redux
+import {onSetDeparture, onSetArrival} from './../../Redux/Actions/FilterAction'
 
-const Home = () => {
+const Home = ({onSetDeparture, onSetArrival, filter}) => {
+
+    const checkGStore = () => {
+        console.log(filter)
+    }
+
     return(
         <Container>
+            <Header style={{...color.bgPrimary}}>
+                <Left />
+                <Body style={{borderWidth: 1, borderColor: 'white', width: '100%'}}>
+                    <Title>
+                        MyBus
+                    </Title>
+                </Body>
+                <Right />
+            </Header>
             <Content>
                 <View style={{...spacing.mFive, backgroundColor: 'white'}}>
                 <Form>
                     <Item stackedLabel>
                         <Label>Mulai Dari</Label>
-                        <Input />
+                        <Input onChangeText={onSetDeparture} />
 
                     </Item>
                 </Form>
                 <Form>
                     <Item stackedLabel>
                         <Label>Kota Tujuan</Label>
-                        <Input />
+                        <Input onChangeText={onSetArrival} />
                     </Item>
                 </Form>
                 </View>
@@ -80,9 +97,9 @@ const Home = () => {
                     </Col>
                 </Grid>
                 <View style={{...spacing.mThree}}>
-                    <Button rounded info style={{width: '100%', ...color.bgSecondary}}>
-                        <Text style={{color: 'black', width: '100%', textAlign: 'center'}}>
-                            Cari Bus
+                    <Button rounded onPress={checkGStore} info style={{width: '100%', ...color.bgPrimary}}>
+                        <Text style={{...color.light, width: '100%', textAlign: 'center'}}>
+                            SEARCH SHUTTLES
                         </Text>                        
                     </Button>
                 </View>
@@ -92,4 +109,14 @@ const Home = () => {
     )
 }
 
-export default Home
+const mapDispatchToProps = {
+    onSetDeparture, onSetArrival
+}
+
+const mapStateToProps = (state) => {
+    return{
+        filter: state.filter
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

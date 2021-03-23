@@ -44,6 +44,11 @@
       "email": "ryans@gmail.com",
       "password": "202020#",
       "id": 9
+    },
+    {
+      "email": "ryan@gmail.co.id",
+      "password": "123123#",
+      "id": 10
     }
   ],
   "shuttles": [
