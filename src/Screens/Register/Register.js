@@ -1,5 +1,5 @@
-import { Container, Content, Grid, Col, Row, Text, Item, Label, Input, Button } from 'native-base'
 import React, { useState } from 'react'
+import { Container, Content, Grid, Col, Row, Text, Item, Label, Input, Button } from 'native-base'
 
 // Styles
 import Color from './../../Supports/Styles/Color'
@@ -9,14 +9,18 @@ import Font from './../../Supports/Styles/Typography'
 // Icon
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-const Register = ({navigation: {navigate}}) => {
+// Redux
+import {connect} from 'react-redux'
+
+import {onUserRegister} from './../../Redux/Actions/UserAction'
+
+const Register = ({navigation: {navigate}, onUserRegister, user}) => {
 
     const [inputEmail, setInputEmail] = useState('')
     const [inputPassword, setInputPassword] = useState('')
     const [errorInput, setErrorInput] = useState('')
 
     const onEmailValidation = (input) => {
-        console.log(input)
         let regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
         if(regex.test(input)){
@@ -41,6 +45,14 @@ const Register = ({navigation: {navigate}}) => {
             setErrorInput('')
         }
     }
+
+    const submitRegister = () => {
+        onUserRegister(inputEmail, inputPassword)
+    }
+
+    // const checkStore = () => {
+    //     console.log(user.error)
+    // }
 
     return(
         <Container>
@@ -86,15 +98,28 @@ const Register = ({navigation: {navigate}}) => {
                     <Row style={{justifyContent: 'center', ...Spacing.prFive}}>
                         <Text style={{color: 'red', fontStyle: 'italic'}}>
                             {errorInput}
+                            {
+                                user.error?
+                                    user.error
+                                :
+                                    null
+                            }
                         </Text>
                     </Row>
                     <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Button rounded style={{width: '100%', ...Color.bgPrimary}}>
+                        <Button rounded onPress={submitRegister} style={{width: '100%', ...Color.bgPrimary}}>
                             <Text style={{textAlign: 'center', width: '100%'}}>
                                 Register
                             </Text>
                         </Button>
                     </Row>
+                    {/* <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
+                        <Button rounded onPress={checkStore} style={{width: '100%', ...Color.bgPrimary}}>
+                            <Text style={{textAlign: 'center', width: '100%'}}>
+                                Check Data Store
+                            </Text>
+                        </Button>
+                    </Row> */}
                     <Row style={{justifyContent: 'center', ...Spacing.ptFive}}>
                         <Text onPress={() => navigate('Login')}>
                             Already have account? Login
@@ -106,4 +131,14 @@ const Register = ({navigation: {navigate}}) => {
     )
 }
 
-export default Register
+const mapDispatchToProps = {
+    onUserRegister
+}
+
+const mapStateToProps = (state) => {
+    return{
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
