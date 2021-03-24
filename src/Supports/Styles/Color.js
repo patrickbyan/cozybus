@@ -4,6 +4,7 @@ const Primary = '#e84545'
 const Secondary = '#2b2e4a'
 const Light = '#f8f8f8'
 const Dark = '#505050'
+const Success = '#00af91'
 
 const color = StyleSheet.create({
     bgPrimary : {
@@ -29,6 +30,12 @@ const color = StyleSheet.create({
     },
     dark : {
         color : Dark
+    },
+    bgSuccess : {
+        backgroundColor : Success
+    },
+    success : {
+        color : Success
     },
 
 
