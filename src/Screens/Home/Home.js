@@ -14,7 +14,7 @@ import Font from './../../Supports/Styles/Typography'
 // Redux
 import {onSetDeparture, onSetArrival, onSetTotalSeat, onSetDate} from './../../Redux/Actions/FilterAction'
 
-const Home = ({onSetDeparture, onSetArrival, filter, onSetTotalSeat}) => {
+const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onSetTotalSeat}) => {
     return(
         <Container>
             <Header style={{...Color.bgPrimary}}>
@@ -78,7 +78,7 @@ const Home = ({onSetDeparture, onSetArrival, filter, onSetTotalSeat}) => {
                 </Grid>
                 <Grid style={{alignSelf: 'center', ...Spacing.pxThree, ...Spacing.pyZero}}>
                     <Row style={{...Spacing.pxZero, ...Spacing.pyFive}}>
-                        <Button style={{width: '100%', borderRadius: 3, ...Color.bgPrimary}} block>
+                        <Button onPress={() => navigate('ShuttleLists')} style={{width: '100%', borderRadius: 3, ...Color.bgPrimary}} block>
                             <Text style={{width: '100%', textAlign: 'center', ...Font.fsThree, ...Font.fStyleLight, ...Color.light}}>
                                 Search
                             </Text>

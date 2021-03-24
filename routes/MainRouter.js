@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Icon from 'react-native-vector-icons/FontAwesome' 
 
 // Screens
-import Home from './../src/Screens/Home/Home'
+import HomeNavigator from './HomeRouter'
 import BookingHistory from './../src/Screens/BookingHistory/BookingHistory'
 import Profile from './../src/Screens/Profile/Profile'
 
@@ -19,7 +19,7 @@ const MainRouter = () => {
             tabBarOptions={{size: 6, activeTintColor: '#e84545', inactiveTintColor: '#2b2e4a' }}
         >
             <Tab.Screen 
-                name='Home' component={Home}
+                name='Home' component={HomeNavigator}
                 options={{
                     tabBarIcon: ({color, size}) => {
                         return(
