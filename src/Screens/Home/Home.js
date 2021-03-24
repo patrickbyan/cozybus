@@ -68,8 +68,9 @@ const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onS
                                     <Item style={{width: '100%'}}>
                                         <Icon name='calendar' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
                                         <DatePicker
+                                            placeholder='Select Date'
                                             style={{width: 200, marginTop: 10}}
-                                            date={new Date()}
+                                            date={filter.date}
                                             minDate={new Date()}
                                             mode="date"
                                             format="DD-MM-YYYY"
