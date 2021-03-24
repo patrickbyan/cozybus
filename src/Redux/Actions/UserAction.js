@@ -16,7 +16,7 @@ export const onUserRegister = (inputEmail, inputPassword) => {
             if(res.data.length === 1){
                 dispatch(
                     {
-                        type: 'REGISTER_FAILED',
+                        type: 'AUTH_FAILED',
                         payload: 'Email Sudah Terdaftar'
                     }
                 )
@@ -27,7 +27,7 @@ export const onUserRegister = (inputEmail, inputPassword) => {
                     .then((resAsyncStorage) => {
                         dispatch(
                             {
-                                type: 'REGISTER_SUCCESS',
+                                type: 'AUTH_SUCCESS',
                                 payload: response.data.id
                             }
                         )
@@ -51,7 +51,7 @@ export const onSaveAsyncStroage = (id) => {
     return(dispatch) => {
         dispatch(
             {
-                type: 'REGISTER_SUCCESS',
+                type: 'AUTH_SUCCESS',
                 payload: id
             }
         )
@@ -73,3 +73,35 @@ export const onUserLogout = () => {
         })
     }
 }
+
+export const onUserLogin = (inputEmail, inputPassword) => {
+    return (dispatch) => {
+        
+        Axios.get(urlAPI + `/users?email=${inputEmail}&password=${inputPassword}`)
+        .then((res) => {
+            if(res.data.length === 1){
+                dispatch(
+                    {
+                        type: 'AUTH_SUCCESS',
+                        payload: res.data[0].id
+                    }
+                )
+            }else{
+                dispatch(
+                    {
+                        type: 'AUTH_FAILED',
+                        payload: 'Akun Tidak Ditemukan'
+                    }
+                )
+            }
+        })
+        .catch((err) => {
+            dispatch(
+                {
+                    type: 'AUTH_FAILED',
+                    payload: err
+                }
+            )
+        })
+    }
+} 

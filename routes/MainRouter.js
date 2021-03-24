@@ -23,7 +23,7 @@ const MainRouter = () => {
                 options={{
                     tabBarIcon: ({color, size}) => {
                         return(
-                            <Icon name='home' color={color} size={size} />
+                            <Icon name='circle' color={color} size={size} />
                         )
                     }
                 }} 
@@ -32,7 +32,7 @@ const MainRouter = () => {
                 name='BookingHistory' component={BookingHistory} 
                 options={{tabBarIcon: ({color, size}) => {
                     return(
-                        <Icon name='credit-card' color={color} size={size} />
+                        <Icon name='list' color={color} size={size} />
                     )
                 }}}
             />
@@ -40,7 +40,7 @@ const MainRouter = () => {
                 name='Profile' component={Profile} 
                 options={{tabBarIcon: ({color, size}) => {
                     return(
-                        <Icon name='user' color={color} size={size} />
+                        <Icon name='user-circle' color={color} size={size} />
                     )
                 }}}
             />

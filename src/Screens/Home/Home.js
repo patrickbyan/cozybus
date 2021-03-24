@@ -1,109 +1,96 @@
-import React from 'react'
-import { Button, Col, Content, Form, Grid, Input, Item, Label, Picker, Container, Header, Left, Right, Body, Title } from 'native-base'
-import { View, Text } from 'react-native'
-import DatePicker from 'react-native-datepicker'
+import React, {useState} from 'react'
 import {connect} from 'react-redux'
+import { Button, Content, Grid, Input, Item, Container, Header, Body, Row, Text, Card, CardItem} from 'native-base'
+import DatePicker from 'react-native-datepicker'
+
+// Icon
+import Icon from 'react-native-vector-icons/FontAwesome' 
 
 // Styles
-import spacing from './../../Supports/Styles/Spacing'
-import color from './../..//Supports/Styles/Color'
+import Spacing from './../../Supports/Styles/Spacing'
+import Color from './../..//Supports/Styles/Color'
+import Font from './../../Supports/Styles/Typography'
 
 // Redux
 import {onSetDeparture, onSetArrival} from './../../Redux/Actions/FilterAction'
+import { onChange } from 'react-native-reanimated'
 
 const Home = ({onSetDeparture, onSetArrival, filter}) => {
 
-    const checkGStore = () => {
-        console.log(filter)
+    const onChange = (date) => {
+        console.log(date)
     }
 
     return(
         <Container>
-            <Header style={{...color.bgPrimary}}>
-                <Left />
-                <Body style={{borderWidth: 1, borderColor: 'white', width: '100%'}}>
-                    <Title>
-                        MyBus
-                    </Title>
+            <Header style={{...Color.bgPrimary}}>
+                <Body style={{alignItems: 'center', width: '100%'}}>
+                    <Text style={{...Font.fsFive, ...Color.light, fontStyle: 'italic', fontWeight: 'bold'}}>
+                        MyBus Apps
+                    </Text>
                 </Body>
-                <Right />
             </Header>
             <Content>
-                <View style={{...spacing.mFive, backgroundColor: 'white'}}>
-                <Form>
-                    <Item stackedLabel>
-                        <Label>Mulai Dari</Label>
-                        <Input onChangeText={onSetDeparture} />
+                <Grid style={{alignSelf: 'center', ...Spacing.pxThree, ...Spacing.pyZero, ...Spacing.mtFive}}>
+                    <Card style={{width: '98%', borderRadius: 3}}>
+                        <CardItem>
+                            <Body>
+                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
+                                    <Item style={{width: '100%'}}>
+                                        <Icon name='map-marker' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
+                                        <Input placeholder='Berangkat Dari' onChangeText={onSetDeparture} style={{paddingVertical: 0, fontSize: 15}} />
+                                    </Item>
+                                </Row>
+                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
+                                    <Item style={{width: '100%'}}>
+                                        <Icon name='map-marker' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
+                                        <Input placeholder='Tujuan' onChangeText={onSetArrival} style={{paddingVertical: 0, fontSize: 15}} />
+                                    </Item>
+                                </Row>
+                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
+                                    <Item style={{width: '100%'}}>
+                                        <Icon name='bus' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
+                                        <Input placeholder='Jumlah Kursi (Max 3)' style={{paddingVertical: 0, fontSize: 15}} />
+                                    </Item>
+                                </Row>
+                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbSix}}>
+                                    <Item style={{width: '100%'}}>
+                                        <Icon name='calendar' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
+                                        <DatePicker
+                                            style={{width: 200, marginTop: 10}}
+                                            date={new Date()}
+                                            minDate={new Date()}
+                                            mode="date"
+                                            format="DD-MM-YYYY"
+                                            confirmBtnText="Confirm"
+                                            cancelBtnText="Cancel"
+                                            onDateChange={(date) => onChange(date)}
+                                            showIcon={false}
 
-                    </Item>
-                </Form>
-                <Form>
-                    <Item stackedLabel>
-                        <Label>Kota Tujuan</Label>
-                        <Input onChangeText={onSetArrival} />
-                    </Item>
-                </Form>
-                </View>
-                <Grid style={{...spacing.mFive, backgroundColor: 'white'}}>
-                    <Col>
-                        <Form>
-                            <Item stackedLabel>
-                                <Label>Tanggal Perjalanan</Label>
-                                <DatePicker
-                                    style={{width: 200, marginTop: 10}}
-                                    date={new Date()}
-                                    minDate={new Date()}
-                                    mode="date"
-                                    format="DD-MM-YYYY"
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    
-                                    customStyles={{
-                                    dateIcon: {
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 0,
-                                        marginLeft: 20
-                                    },
-                                    dateInput: {
-                                        marginLeft: 0,
-                                        marginTop: -10,
-                                        borderWidth: 0
-                                    }
-                                    // ... You can check the source to find the other keys.
-                                    }}
-                                    onDateChange={(date) => {setTanggal(date)}}
-                                />
-                            </Item>
-                        </Form>
-                    </Col>
-                    <Col>
-                        <Form>
-                            <Item stackedLabel>
-                                <Label>Jumlah Seat</Label>
-                                {/* <Picker
-                                    selectedValue={1}
-                                    style={{ height: 50, width: 150 }}
-                                    onValueChange={(itemValue, itemIndex) => setJumlahSeat(itemValue)}
-                                >
-                                    <Picker.Item label="1" value="1" />
-                                    <Picker.Item label="2" value="2" />
-                                    <Picker.Item label="3" value="3" />
-                                    <Picker.Item label="4" value="4" />
-                                </Picker> */}
-
-                            </Item>
-                        </Form>
-                    </Col>
+                                            customStyles={{
+                                                dateInput: {
+                                                    fontSize: 20,
+                                                    marginLeft: -115,
+                                                    marginTop: -10,
+                                                    borderWidth: 0
+                                                }
+                                            }}
+                                        />
+                                    </Item>
+                                </Row>
+                            </Body>
+                        </CardItem>
+                    </Card>
                 </Grid>
-                <View style={{...spacing.mThree}}>
-                    <Button rounded onPress={checkGStore} info style={{width: '100%', ...color.bgPrimary}}>
-                        <Text style={{...color.light, width: '100%', textAlign: 'center'}}>
-                            SEARCH SHUTTLES
-                        </Text>                        
-                    </Button>
-                </View>
-                
+                <Grid style={{alignSelf: 'center', ...Spacing.pxThree, ...Spacing.pyZero}}>
+                    <Row style={{...Spacing.pxZero, ...Spacing.pyFive}}>
+                        <Button style={{width: '100%', borderRadius: 3, ...Color.bgPrimary}} block>
+                            <Text style={{width: '100%', textAlign: 'center', ...Font.fsThree, ...Font.fStyleLight, ...Color.light}}>
+                                Search
+                            </Text>
+                        </Button>
+                    </Row>
+                </Grid>
             </Content>
         </Container>
     )

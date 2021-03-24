@@ -2,53 +2,13 @@
   "users": [
     {
       "email": "ryan@gmail.com",
-      "password": "123123#",
+      "password": "123#123",
       "id": 1
     },
     {
       "email": "ryan20@gmail.com",
-      "password": "123123#",
+      "password": "123@123",
       "id": 2
-    },
-    {
-      "email": "ryan2020@gmail.com",
-      "password": "123123#",
-      "id": 3
-    },
-    {
-      "email": "ryan202029@gmail.com",
-      "password": "123123#",
-      "id": 4
-    },
-    {
-      "email": "ryan.fandy@gmail.com",
-      "password": "123123#",
-      "id": 5
-    },
-    {
-      "email": "ryanfandy@gmail.com",
-      "password": "123123#",
-      "id": 6
-    },
-    {
-      "email": "ryanryan@gmail.com",
-      "password": "123123#",
-      "id": 7
-    },
-    {
-      "email": "ryan202020@gmail.com",
-      "password": "123123!",
-      "id": 8
-    },
-    {
-      "email": "ryans@gmail.com",
-      "password": "202020#",
-      "id": 9
-    },
-    {
-      "email": "ryan@gmail.co.id",
-      "password": "123123#",
-      "id": 10
     }
   ],
   "shuttles": [
