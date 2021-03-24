@@ -80,12 +80,23 @@ export const onUserLogin = (inputEmail, inputPassword) => {
         Axios.get(urlAPI + `/users?email=${inputEmail}&password=${inputPassword}`)
         .then((res) => {
             if(res.data.length === 1){
-                dispatch(
-                    {
-                        type: 'AUTH_SUCCESS',
-                        payload: res.data[0].id
-                    }
-                )
+                AsyncStorage.setItem('@id', (res.data[0].id).toString())
+                .then((responseAsync) => {
+                    dispatch(
+                        {
+                            type: 'AUTH_SUCCESS',
+                            payload: res.data[0].id
+                        }
+                    )
+                })
+                .catch((errorAsync) => {
+                    dispatch(
+                        {
+                            type: 'AUTH_FAILED',
+                            payload: 'Error Async'
+                        }
+                    )
+                })
             }else{
                 dispatch(
                     {

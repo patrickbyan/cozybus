@@ -12,15 +12,9 @@ import Color from './../..//Supports/Styles/Color'
 import Font from './../../Supports/Styles/Typography'
 
 // Redux
-import {onSetDeparture, onSetArrival} from './../../Redux/Actions/FilterAction'
-import { onChange } from 'react-native-reanimated'
+import {onSetDeparture, onSetArrival, onSetTotalSeat, onSetDate} from './../../Redux/Actions/FilterAction'
 
-const Home = ({onSetDeparture, onSetArrival, filter}) => {
-
-    const onChange = (date) => {
-        console.log(date)
-    }
-
+const Home = ({onSetDeparture, onSetArrival, filter, onSetTotalSeat}) => {
     return(
         <Container>
             <Header style={{...Color.bgPrimary}}>
@@ -50,7 +44,7 @@ const Home = ({onSetDeparture, onSetArrival, filter}) => {
                                 <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
                                     <Item style={{width: '100%'}}>
                                         <Icon name='bus' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
-                                        <Input placeholder='Jumlah Kursi (Max 3)' style={{paddingVertical: 0, fontSize: 15}} />
+                                        <Input placeholder='Jumlah Kursi (Max 3)' onChangeText={onSetTotalSeat} style={{paddingVertical: 0, fontSize: 15}} />
                                     </Item>
                                 </Row>
                                 <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbSix}}>
@@ -64,7 +58,7 @@ const Home = ({onSetDeparture, onSetArrival, filter}) => {
                                             format="DD-MM-YYYY"
                                             confirmBtnText="Confirm"
                                             cancelBtnText="Cancel"
-                                            onDateChange={(date) => onChange(date)}
+                                            onDateChange={(date) => onSetDate(date)}
                                             showIcon={false}
 
                                             customStyles={{
@@ -97,7 +91,7 @@ const Home = ({onSetDeparture, onSetArrival, filter}) => {
 }
 
 const mapDispatchToProps = {
-    onSetDeparture, onSetArrival
+    onSetDeparture, onSetArrival, onSetTotalSeat
 }
 
 const mapStateToProps = (state) => {
