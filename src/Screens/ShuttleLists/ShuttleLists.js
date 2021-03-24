@@ -1,5 +1,5 @@
 import { Col, Container, Content, Grid, Header, Row, Text, Title, View } from 'native-base'
-import React from 'react'
+import React, {useEffect} from 'react'
 
 // Styles
 import Color from './../../Supports/Styles/Color'
@@ -9,7 +9,12 @@ import Font from './../../Supports/Styles/Typography'
 // Icon
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-const ShuttleLists = () => {
+const ShuttleLists = ({route}) => {
+
+    useEffect(() => {
+        console.log(route.params.data)
+    }, [])
+
     return(
         <Container>
             <Header style={{alignItems: 'center', ...Color.bgPrimary}}>

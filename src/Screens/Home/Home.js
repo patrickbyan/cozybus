@@ -14,7 +14,24 @@ import Font from './../../Supports/Styles/Typography'
 // Redux
 import {onSetDeparture, onSetArrival, onSetTotalSeat, onSetDate} from './../../Redux/Actions/FilterAction'
 
-const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onSetTotalSeat}) => {
+const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onSetTotalSeat, onSetDate}) => {
+    
+    const [error, setError] = useState('')
+
+    const onSearchShuttle = () => {
+
+        if(filter.seat > 3){
+            return setError('Jumlah Kursi Max 3')
+        }
+
+        if(filter.departure && filter.arrival && filter.date && filter.seat){
+            navigate('ShuttleLists', {data: filter})
+            setError('')
+        }else{
+            return setError('Masukan Semua Inputan')
+        }
+    }
+    
     return(
         <Container>
             <Header style={{...Color.bgPrimary}}>
@@ -78,11 +95,18 @@ const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onS
                 </Grid>
                 <Grid style={{alignSelf: 'center', ...Spacing.pxThree, ...Spacing.pyZero}}>
                     <Row style={{...Spacing.pxZero, ...Spacing.pyFive}}>
-                        <Button onPress={() => navigate('ShuttleLists')} style={{width: '100%', borderRadius: 3, ...Color.bgPrimary}} block>
+                        <Button onPress={onSearchShuttle} style={{width: '100%', borderRadius: 3, ...Color.bgPrimary}} block>
                             <Text style={{width: '100%', textAlign: 'center', ...Font.fsThree, ...Font.fStyleLight, ...Color.light}}>
                                 Search
                             </Text>
                         </Button>
+                    </Row>
+                    <Row style={{justifyContent: 'center'}}>
+                        <Text style={{...Color.primary, fontStyle: 'italic'}}>
+                            {
+                                error
+                            }
+                        </Text>
                     </Row>
                 </Grid>
             </Content>
@@ -91,7 +115,7 @@ const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onS
 }
 
 const mapDispatchToProps = {
-    onSetDeparture, onSetArrival, onSetTotalSeat
+    onSetDeparture, onSetArrival, onSetTotalSeat, onSetDate
 }
 
 const mapStateToProps = (state) => {

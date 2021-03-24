@@ -20,6 +20,7 @@ export const onSetTotalSeat = (input) => {
 }
 
 export const onSetDate = (input) => {
+    console.log(input)
     return{
         type: 'ON_SET_DATE',
         payload: input
