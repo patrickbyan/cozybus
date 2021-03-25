@@ -60,8 +60,8 @@ const ShuttleLists = ({route, getShuttleLists, shuttles, navigation: {navigate}}
                     :
                         shuttles.shuttleList.map((value, index) => {
                             return(
-                                <TouchableOpacity onPress={() => navigate('ShuttleDetail')}>
-                                    <View key={index} style={{...Spacing.mbThree, ...Spacing.pbFive, borderBottomWidth: 1, borderColor: 'grey'}}>
+                                <TouchableOpacity key={index} onPress={() => navigate('ShuttleDetail', {id: value.id})}>
+                                    <View style={{...Spacing.mbThree, ...Spacing.pbFive, borderBottomWidth: 1, borderColor: 'grey'}}>
                                         <Grid>
                                             <Col>
                                                 <Text style={{...Font.fsFive}}>
