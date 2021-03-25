@@ -13,12 +13,13 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Icon1 from 'react-native-vector-icons/Ionicons'
 
 // Action
-import {getShuttleDetail} from './../../Redux/Actions/ShuttlesAction'
+import {getShuttleDetail, getSeatBooked} from './../../Redux/Actions/ShuttlesAction'
 
-const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles}) => {
+const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBooked, filter}) => {
 
     useEffect(() => {
         getShuttleDetail(route.params.id)
+        getSeatBooked(route.params.id, filter.date)
     }, [])
 
     if(shuttles.shuttleDetail){
@@ -110,7 +111,7 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles}) => {
                             shuttles.shuttleDetail.facility.map((value, index) => {
                                 return(
                                     <Col key={index}>
-                                        <Image source={{uri: value.image}} style={{width: 350, height: 350}} />
+                                        <Image source={require('./../../Supports/Images/toilet.png')} style={{width: 35, height: 35}} />
                                     </Col>
                                 )
                             })
@@ -123,16 +124,28 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles}) => {
                             </Text>
                         </Row>
                     </Grid>
-                    <Grid style={{...Spacing.pxFive, ...Spacing.mtTwo, flexWrap: 'wrap'}}>
+                    <Grid style={{...Spacing.pxEight, ...Spacing.pyFive, ...Spacing.mtTwo, ...Spacing.mxFive, flexWrap: 'wrap', borderWidth: 1, borderColor: 'black', borderRadius: 3}}>
                         {
                             shuttles.shuttleDetail.seat.map((value, index) => {
                                 return(
-                                    <Col style={{width: '25%', ...Spacing.mbTwo}}>
-                                        <Icon1 name='person-outline' style={{fontSize: 25}} />
-                                        <Text>
-                                            {value}
-                                        </Text>
-                                    </Col>
+                                    <>
+                                        {
+                                            shuttles.seatBooked.includes(value)?
+                                                <Col key={index} style={{width: '25%', alignItems: 'center', ...Spacing.mbTwo}}>
+                                                    <Icon1 name='person' style={{fontSize: 25}} />
+                                                    <Text>
+                                                        Booked
+                                                    </Text>
+                                                </Col>
+                                            :
+                                                <Col key={index} style={{width: '25%', alignItems: 'center', ...Spacing.mbTwo}}>
+                                                    <Icon1 name='person-outline' style={{fontSize: 25}} />
+                                                    <Text>
+                                                        {value}
+                                                    </Text>
+                                                </Col>
+                                        }
+                                    </>
                                 )
                             })
                         }
@@ -164,12 +177,13 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles}) => {
 }
 
 const mapDispatchToProps = {
-    getShuttleDetail
+    getShuttleDetail, getSeatBooked
 }
 
 const mapStateToProps = (state) => {
     return{
-        shuttles: state.shuttles
+        shuttles: state.shuttles,
+        filter: state.filter
     }
 }
 

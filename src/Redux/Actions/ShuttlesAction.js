@@ -63,6 +63,35 @@ export const getShuttleDetail = (id) => {
     }
 }
 
+export const getSeatBooked = (idBus, departureDate) => {
+    return (dispatch) => {
+        
+        Axios.get(urlAPI + `/transactions?idBus=${idBus}&departureDate=${departureDate}`)
+        .then((res) => {
+            let data = res.data
+            console.log(data)
+
+            let seatBooked = []
+            for(let i=0; i < data.length; i++){ 
+                console.log(data[i].seat)
+                for(let j=0; j < data[i].seat.length; j++){
+                    seatBooked.push(data[i].seat[j])
+                }
+            }
+
+            dispatch(
+                {
+                    type: 'GET_SEAT_BOOKED',
+                    payload: seatBooked
+                }
+            )
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+}
+
 
 
 
@@ -137,3 +166,41 @@ export const getShuttleDetail = (id) => {
 //         "image": "https://www.flaticon.com/svg/vstatic/svg/4164/4164916.svg?token=exp=1616259493~hmac=835794a1b4400b6eed7a34b61ddc4a07"
 //       }
 //   ]
+
+// #################################################################
+
+
+// 1. Get Seat Booked
+// let data = [
+//             {
+//                 "idShuttle": 1,
+//                 "idUser": 1,
+//                 "name": "Pahala Kencana",
+//                 "class": "Executive",
+//                 "from": "Bandung",
+//                 "to": "Surabaya",
+//                 "departureDate": "26-03-2021",
+//                 "seat": ["1A", "3C", "5A"],
+//                 "totalPrice": 825000
+//             },
+//             {
+//                 "idShuttle": 1,
+//                 "idUser": 1,
+//                 "name": "Pahala Kencana",
+//                 "class": "Executive",
+//                 "from": "Bandung",
+//                 "to": "Surabaya",
+//                 "departureDate": "26-03-2021",
+//                 "seat": ["2A", "2C", "5B"],
+//                 "totalPrice": 825000
+//             }
+//         ]
+
+// 2. Looping 
+
+// let seatBooked = []
+// for(i=0; i < data.length; i++){ // i=0 || i=1
+//     for(let j=0; j < data[i].seat.length; j++){ //data[0].seat.length --- data[1].seat.length
+//         seatBooked.push(data[i].seat[j]) //data[0].seat[0] || data[0].seat[1] || data[0].seat[2] --- data[1].seat[0] || data[1].seat[1]
+//     }
+// }

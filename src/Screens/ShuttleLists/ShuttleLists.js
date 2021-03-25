@@ -19,6 +19,7 @@ const ShuttleLists = ({route, getShuttleLists, shuttles, navigation: {navigate}}
     useEffect(() => {
         let departure = route.params.data.departure
         let arrival = route.params.data.arrival
+        console.log(route.params.data.date)
         getShuttleLists(departure, arrival)
     }, [])
 
