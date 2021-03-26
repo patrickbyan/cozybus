@@ -21,25 +21,25 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
     const [selectedSeat, setSelectedSeat] = useState([])
     const [isTotalSeatTrue, setIsTotalSeatTrue] = useState(false)
     const [errorSelectedSeat, setErrorSelectedSeat] = useState('')
+    const [showButton, setShowButton] = useState(false)
 
     useEffect(() => {
         getShuttleDetail(route.params.id)
         getSeatBooked(route.params.id, filter.date)
     }, [])
 
-    const onSelectSeat = (seatNumber, condition) => {
-        console.log(condition)
+    const onSelectSeat = (seatNumber) => {
         // Apakah jumlah selected seat < dengan total seat yg di input
-        if(selectedSeat.length < filter.seat){
+        if(Number(selectedSeat.length) < Number(filter.seat)){
             if(selectedSeat.includes(seatNumber)){
-                // 1. Cari seat ada di index ke berapa
+                // 1. Cari seat ada di index ke berapa (Unselect)
                 let indexSeat = selectedSeat.indexOf(seatNumber)
     
                 let arrSelectedSeat = [...selectedSeat]
                 arrSelectedSeat.splice(indexSeat, 1)
-                
             }else{
                 setSelectedSeat([...selectedSeat, seatNumber])
+                setShowButton(true)
             }
         }else{
             // Apakah seat yg dipilih ada di dalam selected seat
@@ -53,7 +53,7 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
                 setSelectedSeat(arrSelectedSeat)
                 setErrorSelectedSeat('')
             }else{
-                setErrorSelectedSeat('Total Seat Maksimal Hanya' + filter.seat)
+                setErrorSelectedSeat('Total Seat Maksimal Hanya ' + filter.seat)
             }
         }
     }
@@ -191,6 +191,43 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
                                     </Col>
                                 )
                             })
+                        }
+                    </Grid>
+                    <Grid style={{...Spacing.pxOne, ...Spacing.pyThree, ...Spacing.mtFive, ...Color.bgPrimary, alignItems: 'center'}}>
+                        {
+                            showButton?
+                                <>
+                                    <Col>
+                                        <Text style={{...Color.light, ...Font.fsFour}}>
+                                            Seat : 
+                                            {
+                                                selectedSeat.map((value, index) => {
+                                                    return(
+                                                        <Text key={index} style={{...Color.light, ...Font.fsFour}}>
+                                                            {value}
+                                                        </Text>
+                                                    )
+                                                })
+                                            }
+                                        </Text>
+                                    </Col>
+                                    <Col>
+                                        <Text style={{...Color.light, ...Font.fsFour, fontWeight: 'bold'}}>
+                                            Rp.{
+                                                selectedSeat.length * shuttles.shuttleDetail.price
+                                            }
+                                        </Text>
+                                    </Col>
+                                    <Col>
+                                        <Button  style={{width: '100%'}}>
+                                            <Text style={{width: '100%', textAlign: 'center'}}>
+                                                Checkout
+                                            </Text>
+                                        </Button>
+                                    </Col>
+                                </>
+                            :
+                                null
                         }
                     </Grid>
                 </Content>
