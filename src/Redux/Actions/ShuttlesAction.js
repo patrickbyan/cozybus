@@ -66,7 +66,7 @@ export const getShuttleDetail = (id) => {
 export const getSeatBooked = (idBus, departureDate) => {
     return (dispatch) => {
         
-        Axios.get(urlAPI + `/transactions?idBus=${idBus}&departureDate=${departureDate}`)
+        Axios.get(urlAPI + `/transactions?idShuttle=${idBus}&departureDate=${departureDate}`)
         .then((res) => {
             let data = res.data
             console.log(data)

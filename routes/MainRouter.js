@@ -2,7 +2,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 // Icon
-import Icon from 'react-native-vector-icons/FontAwesome' 
+import Icon from 'react-native-vector-icons/Ionicons' 
 
 // Screens
 import HomeNavigator from './HomeRouter'
@@ -23,7 +23,7 @@ const MainRouter = () => {
                 options={{
                     tabBarIcon: ({color, size}) => {
                         return(
-                            <Icon name='circle' color={color} size={size} />
+                            <Icon name='home-outline' color={color} size={size} />
                         )
                     }
                 }} 
@@ -32,7 +32,7 @@ const MainRouter = () => {
                 name='BookingHistory' component={BookingHistory} 
                 options={{tabBarIcon: ({color, size}) => {
                     return(
-                        <Icon name='list' color={color} size={size} />
+                        <Icon name='receipt-outline' color={color} size={size} />
                     )
                 }}}
             />
@@ -40,7 +40,7 @@ const MainRouter = () => {
                 name='Profile' component={Profile} 
                 options={{tabBarIcon: ({color, size}) => {
                     return(
-                        <Icon name='user-circle' color={color} size={size} />
+                        <Icon name='person-circle-outline' color={color} size={size} />
                     )
                 }}}
             />

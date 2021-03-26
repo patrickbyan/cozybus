@@ -262,6 +262,8 @@
 
   "transactions": [
     {
+      "id": 1,
+      "idShuttle": 1,
       "status": "Paid",
       "idUser": 1,
       "name": "Pahala Kencana",
@@ -273,6 +275,8 @@
       "totalPrice": 825000
     },
     {
+      "id": 2,
+      "idShuttle": 1,
       "status": "Paid",
       "idUser": 1,
       "name": "Pahala Kencana",
@@ -284,6 +288,8 @@
       "totalPrice": 825000
     },
     {
+      "id": 3,
+      "idShuttle": 1,
       "status": "Paid",
       "idUser": 1,
       "name": "Pahala Kencana",

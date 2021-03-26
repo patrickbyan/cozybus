@@ -2,6 +2,7 @@ import { Body, Button, Card, Col, Container, Content, Grid, Header, Left, Right,
 import {Image} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {connect} from 'react-redux'
+import {TouchableOpacity} from 'react-native-gesture-handler'
 
 // Styles
 import Color from './../../Supports/Styles/Color'
@@ -17,13 +18,46 @@ import {getShuttleDetail, getSeatBooked} from './../../Redux/Actions/ShuttlesAct
 
 const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBooked, filter}) => {
 
+    const [selectedSeat, setSelectedSeat] = useState([])
+    const [isTotalSeatTrue, setIsTotalSeatTrue] = useState(false)
+    const [errorSelectedSeat, setErrorSelectedSeat] = useState('')
+
     useEffect(() => {
         getShuttleDetail(route.params.id)
         getSeatBooked(route.params.id, filter.date)
     }, [])
 
-    if(shuttles.shuttleDetail){
+    const onSelectSeat = (seatNumber) => {
+        // Apakah jumlah selected seat < dengan total seat yg di input
+        if(selectedSeat.length < filter.seat){
+            if(selectedSeat.includes(seatNumber)){
+                // 1. Cari seat ada di index ke berapa
+                let indexSeat = selectedSeat.indexOf(seatNumber)
     
+                let arrSelectedSeat = [...selectedSeat]
+                arrSelectedSeat.splice(indexSeat, 1)
+                
+            }else{
+                setSelectedSeat([...selectedSeat, seatNumber])
+            }
+        }else{
+            // Apakah seat yg dipilih ada di dalam selected seat
+            if(selectedSeat.includes(seatNumber)){
+                // 1. Cari seat ada di index ke berapa
+                let indexSeat = selectedSeat.indexOf(seatNumber)
+    
+                let arrSelectedSeat = [...selectedSeat]
+                arrSelectedSeat.splice(indexSeat, 1)
+    
+                setSelectedSeat(arrSelectedSeat)
+                setErrorSelectedSeat('')
+            }else{
+                setErrorSelectedSeat('Total Seat Maksimal Hanya' + filter.seat)
+            }
+        }
+    }
+
+    if(shuttles.shuttleDetail){
         return(
             <Container>
                 <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
@@ -122,30 +156,48 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
                             <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
                                 Seat
                             </Text>
+                            <Text>
+                                {
+                                    errorSelectedSeat
+                                }
+                            </Text>
                         </Row>
                     </Grid>
                     <Grid style={{...Spacing.pxEight, ...Spacing.pyFive, ...Spacing.mtTwo, ...Spacing.mxFive, flexWrap: 'wrap', borderWidth: 1, borderColor: 'black', borderRadius: 3}}>
                         {
                             shuttles.shuttleDetail.seat.map((value, index) => {
                                 return(
-                                    <>
+                                    <Col key={index} style={{width: '25%', alignItems: 'center', ...Spacing.mbTwo}}>
                                         {
                                             shuttles.seatBooked.includes(value)?
-                                                <Col key={index} style={{width: '25%', alignItems: 'center', ...Spacing.mbTwo}}>
+                                                <>
                                                     <Icon1 name='person' style={{fontSize: 25}} />
                                                     <Text>
                                                         Booked
                                                     </Text>
-                                                </Col>
+                                                </>
                                             :
-                                                <Col key={index} style={{width: '25%', alignItems: 'center', ...Spacing.mbTwo}}>
-                                                    <Icon1 name='person-outline' style={{fontSize: 25}} />
-                                                    <Text>
-                                                        {value}
-                                                    </Text>
-                                                </Col>
+                                                
+                                                <>
+                                                    {
+                                                        selectedSeat.includes(value)?
+                                                            <TouchableOpacity onPress={() => onSelectSeat(value)}>
+                                                                <Icon1 name='person' style={{fontSize: 25, ...Color.success}} />
+                                                                <Text>
+                                                                    {value}
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                        :
+                                                            <TouchableOpacity onPress={() => onSelectSeat(value)}>
+                                                                <Icon1 name='person-outline' style={{fontSize: 25, ...Color.dark}} />
+                                                                <Text>
+                                                                    {value}
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                    }
+                                                </>
                                         }
-                                    </>
+                                    </Col>
                                 )
                             })
                         }
