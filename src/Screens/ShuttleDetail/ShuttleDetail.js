@@ -27,7 +27,8 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
         getSeatBooked(route.params.id, filter.date)
     }, [])
 
-    const onSelectSeat = (seatNumber) => {
+    const onSelectSeat = (seatNumber, condition) => {
+        console.log(condition)
         // Apakah jumlah selected seat < dengan total seat yg di input
         if(selectedSeat.length < filter.seat){
             if(selectedSeat.includes(seatNumber)){
@@ -179,22 +180,12 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
                                             :
                                                 
                                                 <>
-                                                    {
-                                                        selectedSeat.includes(value)?
-                                                            <TouchableOpacity onPress={() => onSelectSeat(value)}>
-                                                                <Icon1 name='person' style={{fontSize: 25, ...Color.success}} />
-                                                                <Text>
-                                                                    {value}
-                                                                </Text>
-                                                            </TouchableOpacity>
-                                                        :
-                                                            <TouchableOpacity onPress={() => onSelectSeat(value)}>
-                                                                <Icon1 name='person-outline' style={{fontSize: 25, ...Color.dark}} />
-                                                                <Text>
-                                                                    {value}
-                                                                </Text>
-                                                            </TouchableOpacity>
-                                                    }
+                                                    <TouchableOpacity onPress={() => onSelectSeat(value)}>
+                                                        <Icon1 name={selectedSeat.includes(value)? 'person' : 'person-outline'} style={selectedSeat.includes(value)? {fontSize: 25, ...Color.success} : {fontSize: 25, ...Color.dark}} />
+                                                        <Text>
+                                                            {value}
+                                                        </Text>
+                                                    </TouchableOpacity>
                                                 </>
                                         }
                                     </Col>
