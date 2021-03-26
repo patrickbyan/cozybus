@@ -16,12 +16,11 @@ import Icon1 from 'react-native-vector-icons/Ionicons'
 // Action
 import {getShuttleDetail, getSeatBooked} from './../../Redux/Actions/ShuttlesAction'
 
-const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBooked, filter}) => {
+const ShuttleDetail = ({navigation: {navigate}, navigation, route, getShuttleDetail, shuttles, getSeatBooked, filter}) => {
 
     const [selectedSeat, setSelectedSeat] = useState([])
     const [isTotalSeatTrue, setIsTotalSeatTrue] = useState(false)
     const [errorSelectedSeat, setErrorSelectedSeat] = useState('')
-    const [showButton, setShowButton] = useState(false)
 
     useEffect(() => {
         getShuttleDetail(route.params.id)
@@ -30,18 +29,19 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
 
     const onSelectSeat = (seatNumber) => {
         // Apakah jumlah selected seat < dengan total seat yg di input
-        if(Number(selectedSeat.length) < Number(filter.seat)){
+        if(selectedSeat.length < filter.seat){
             if(selectedSeat.includes(seatNumber)){
                 // 1. Cari seat ada di index ke berapa (Unselect)
                 let indexSeat = selectedSeat.indexOf(seatNumber)
     
                 let arrSelectedSeat = [...selectedSeat]
                 arrSelectedSeat.splice(indexSeat, 1)
+
+                setSelectedSeat(arrSelectedSeat)
             }else{
                 setSelectedSeat([...selectedSeat, seatNumber])
-                setShowButton(true)
             }
-        }else{
+        }else if(selectedSeat.length >= filter.seat){
             // Apakah seat yg dipilih ada di dalam selected seat
             if(selectedSeat.includes(seatNumber)){
                 // 1. Cari seat ada di index ke berapa
@@ -58,6 +58,9 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
         }
     }
 
+    const onCheckoutSubmit = () => {
+        navigate('BookingDetail', {seat: selectedSeat, price: selectedSeat.length * shuttles.shuttleDetail.price})
+    }
     if(shuttles.shuttleDetail){
         return(
             <Container>
@@ -195,7 +198,7 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
                     </Grid>
                     <Grid style={{...Spacing.pxOne, ...Spacing.pyThree, ...Spacing.mtFive, ...Color.bgPrimary, alignItems: 'center'}}>
                         {
-                            showButton?
+                            Number(selectedSeat.length) === Number(filter.seat)?
                                 <>
                                     <Col>
                                         <Text style={{...Color.light, ...Font.fsFour}}>
@@ -219,7 +222,7 @@ const ShuttleDetail = ({navigation, route, getShuttleDetail, shuttles, getSeatBo
                                         </Text>
                                     </Col>
                                     <Col>
-                                        <Button  style={{width: '100%'}}>
+                                        <Button onPress={() => {onCheckoutSubmit()}}  style={{width: '100%'}}>
                                             <Text style={{width: '100%', textAlign: 'center'}}>
                                                 Checkout
                                             </Text>
