@@ -25,6 +25,12 @@ export const onUserRegister = (inputEmail, inputPassword) => {
                 .then((response) => {
                     AsyncStorage.setItem('@id', (response.data.id).toString())
                     .then((resAsyncStorage) => {
+                        // console.log(response.data)
+
+                        // let dataToSend = {
+                        //     id: response.data.id,
+                        //     email: response.data.email
+                        // }
                         dispatch(
                             {
                                 type: 'AUTH_SUCCESS',
@@ -49,6 +55,8 @@ export const onUserRegister = (inputEmail, inputPassword) => {
 
 export const onSaveAsyncStroage = (id) => {
     return(dispatch) => {
+
+        // Get Data User Berdasarkan Id
         dispatch(
             {
                 type: 'AUTH_SUCCESS',

@@ -1,4 +1,4 @@
-import { Body, Container, Content, Grid, Header, Input, Item, Label, Left, Row, Text } from 'native-base'
+import { Body, Button, Container, Content, Grid, Header, Input, Item, Label, Left, Row, Text } from 'native-base'
 import React, {useEffect, useState} from 'react'
 
 // Styles
@@ -13,12 +13,74 @@ import spacing from './../../Supports/Styles/Spacing'
 
 const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
 
+    const [objData, setObjData] = useState(
+        {
+            nama: null, 
+            umur: null
+        }
+    )
     const [selectedSeat, setSelectedSeat] = useState([])
+    const [passenger, setPassenger] = useState([])
+    // [
+    //     {
+    //         seat: '1D',
+    //         nama: null, 
+    //         umur: null,
+    //     },
+    //     {
+    //         seat: '2D',
+    //         nama: null, 
+    //         umur: null,
+    //     },
+    //     {
+    //         seat: '3D',
+    //         nama: null, 
+    //         umur: null,
+    //     }
+    // ]
 
     useEffect(() => {
-        setSelectedSeat(route.params.seat)
+        setSelectedSeat(route.params.seat) // [1D, 2D, 3D]
+
+        let selectedSeat = route.params.seat
+        let newArr = []
+
+        for(let i=0; i <selectedSeat.length; i++){
+            newArr.push(
+                {
+                    seat: selectedSeat[i],
+                    name: null,
+                    umur: null
+                }
+            )
+        }
+
+        setPassenger(newArr)
     }, [])
 
+    const dataPassenger = (input, seatNumber, inputType) => {
+        console.log(seatNumber)
+        console.log(input)
+        console.log(inputType)
+
+        let arrPassenger = [...passenger]
+
+        // for(let i=0; i < passenger.length; i++){
+        //     if(passenger[i].seat === seatNumber){
+        //         console.log(passenger[i])
+        //         console.log(i)
+
+        //         arrPassenger[i].nama = input
+
+        //         setPassenger = [arrPassenger]
+        //     }
+        // }
+    }
+
+    const onCheck = () => {
+        console.log(passenger)
+    }
+ 
     return(
         <Container>
             <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
@@ -52,6 +114,13 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
                     </Row>
                 </Grid>
                 <Grid style={{...Spacing.pxFive, ...Spacing.mtSeven}}>
+                    <Button onPress={onCheck}>
+                        <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
+                            Check
+                        </Text>
+                    </Button>
+                </Grid>
+                <Grid style={{...Spacing.pxFive, ...Spacing.mtSeven}}>
                     <Row>
                         <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
                             Informasi Penumpang
@@ -61,7 +130,7 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
                 {
                     selectedSeat.map((value, index) => {
                         return(
-                            <Grid key={index} style={{...Spacing.pxFive}}>
+                            <Grid key={index} style={{...Spacing.pxFive, ...Spacing.pyThree, ...Spacing.mxFive, ...Spacing.mbThree, ...Color.bgLight}}>
                                 <Row>
                                     <Text style={{textAlign: 'right', width: '100%', fontWeight: 'bold'}}>
                                         Seat : {value}
@@ -69,14 +138,14 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
                                 </Row>
                                 <Row style={{...Spacing.mtThree}}>
                                     <Item stackedLabel style={{width: '100%'}}>
-                                        <Label>Email</Label>
-                                        <Input style={{width: '100%'}} />
+                                        <Label>Nama</Label>
+                                        <Input onChangeText={(input) => dataPassenger(input, value, 'nama')} style={{width: '100%'}} />
                                     </Item>
                                 </Row>
                                 <Row style={{...Spacing.mtThree}}>
                                     <Item stackedLabel style={{width: '100%'}}>
-                                        <Label>Phone Number</Label>
-                                        <Input style={{width: '100%'}} />
+                                        <Label>Umur</Label>
+                                        <Input onChangeText={(input) => dataPassenger(input, value, 'umur')} style={{width: '100%'}} />
                                     </Item>
                                 </Row>
                             </Grid>
