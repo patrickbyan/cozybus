@@ -59,7 +59,8 @@ const ShuttleDetail = ({navigation: {navigate}, navigation, route, getShuttleDet
     }
 
     const onCheckoutSubmit = () => {
-        navigate('BookingDetail', {seat: selectedSeat, price: selectedSeat.length * shuttles.shuttleDetail.price})
+        navigate('BookingDetail', {seat: selectedSeat, price: selectedSeat.length * shuttles.shuttleDetail.price, 
+        idShuttle: route.params.id, name: shuttles.shuttleDetail.name, class: shuttles.shuttleDetail.class, })
     }
     if(shuttles.shuttleDetail){
         return(

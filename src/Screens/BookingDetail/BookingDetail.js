@@ -1,5 +1,8 @@
 import { Body, Button, Container, Content, Grid, Header, Input, Item, Label, Left, Row, Text } from 'native-base'
 import React, {useEffect, useState} from 'react'
+import { connect } from 'react-redux'
+import Axios from 'axios'
+import {urlAPI} from './../../Supports/Constants/urlAPI'
 
 // Styles
 import Color from './../../Supports/Styles/Color'
@@ -11,14 +14,11 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Icon1 from 'react-native-vector-icons/Ionicons'
 import spacing from './../../Supports/Styles/Spacing'
 
-const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
+// Moment
+import Moment from 'moment'
+import 'moment-timezone'
 
-    const [objData, setObjData] = useState(
-        {
-            nama: null, 
-            umur: null
-        }
-    )
+const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter}) => {
     const [selectedSeat, setSelectedSeat] = useState([])
     const [passenger, setPassenger] = useState([])
     // [
@@ -41,6 +41,7 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
 
     useEffect(() => {
         setSelectedSeat(route.params.seat) // [1D, 2D, 3D]
+        console.log('idShuttle: ' + route.params.idShuttle)
 
         let selectedSeat = route.params.seat
         let newArr = []
@@ -82,8 +83,45 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
         }
     }
 
-    const onCheck = () => {
-        console.log(passenger)
+    const onPayment = () => {
+        // Tugas 1 : Buat validasi untuk data informasi penumpang (Pastikan semua data lengkap)
+
+        // idShuttle : route.params.idShuttle 
+        //  status : 'Unpaid'
+        //  idUser : Global Store ---> User
+        //  name : route.params.name
+        // class : route.params.class
+        //  from : Global Store ---> Filter
+        // to : Global Store ---> Filter
+        // departureDate : Global Store ---> Filter
+        // seat : selectedSeat (state)
+        // detailPassenger : passenger (state)
+        // totalPrice : route.params.price
+
+        let expiredAt = Moment(new Date()).add({minutes: 15}).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
+
+        let dataToSend = {
+            idShuttle: route.params.idShuttle,
+            status: 'Unpaid',
+            expiredAt: expiredAt,
+            idUser: user.id,
+            name: route.params.name,
+            class: route.params.class,
+            from: filter.departure,
+            to: filter.arrival,
+            departureDate: filter.date,
+            seat: selectedSeat,
+            detailPassenger: passenger,
+            totalPrice: route.params.price
+        }
+
+        Axios.post(urlAPI + '/transactions', {...dataToSend})
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
  
     return(
@@ -119,13 +157,6 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
                     </Row>
                 </Grid>
                 <Grid style={{...Spacing.pxFive, ...Spacing.mtSeven}}>
-                    <Button onPress={onCheck}>
-                        <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
-                            Check
-                        </Text>
-                    </Button>
-                </Grid>
-                <Grid style={{...Spacing.pxFive, ...Spacing.mtSeven}}>
                     <Row>
                         <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
                             Informasi Penumpang
@@ -157,9 +188,23 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
                         )
                     })
                 }
+                <Grid style={{...Spacing.pxFive, ...Spacing.myThree}}>
+                    <Button onPress={onPayment} style={{width: '100%'}}>
+                        <Text style={{...Font.fsThree, width: '100%', textAlign: 'center'}}>
+                            Payment
+                        </Text>
+                    </Button>
+                </Grid>
             </Content>
         </Container>
     )
 }
 
-export default BookingDetail
+const mapStateToProps = (state) => {
+    return{
+        user: state.user,
+        filter: state.filter
+    }
+}
+
+export default connect(mapStateToProps, '')(BookingDetail)
