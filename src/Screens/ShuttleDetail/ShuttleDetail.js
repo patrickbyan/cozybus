@@ -62,7 +62,7 @@ const ShuttleDetail = ({navigation: {navigate}, navigation, route, getShuttleDet
         navigate('BookingDetail', {seat: selectedSeat, price: selectedSeat.length * shuttles.shuttleDetail.price, 
         idShuttle: route.params.id, name: shuttles.shuttleDetail.name, class: shuttles.shuttleDetail.class, })
     }
-    if(shuttles.shuttleDetail){
+    if(shuttles.shuttleDetail && shuttles.seatBooked){
         return(
             <Container>
                 <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
@@ -161,7 +161,7 @@ const ShuttleDetail = ({navigation: {navigate}, navigation, route, getShuttleDet
                             <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
                                 Seat
                             </Text>
-                            <Text>
+                            <Text style={{textAlign: 'right', width: '90%', color: 'red'}}>
                                 {
                                     errorSelectedSeat
                                 }

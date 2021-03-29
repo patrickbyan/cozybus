@@ -260,8 +260,8 @@
   "transactions": [
     {
       "idShuttle": 1,
-      "status": "Unpaid",
-      "expiredAt": "2021-03-29 11:55:45",
+      "status": "Paid",
+      "expiredAt": "",
       "idUser": "2",
       "name": "Pahala Kencana",
       "class": "Executive",
@@ -269,28 +269,34 @@
       "to": "Surabaya",
       "departureDate": "30-03-2021",
       "seat": [
+        "1C",
         "1D",
-        "2D"
+        "1B"
       ],
       "detailPassenger": [
         {
-          "seat": "1D",
+          "seat": "1C",
           "name": "Ryan",
           "umur": "12"
         },
         {
-          "seat": "2D",
-          "name": "Fandi Ario",
-          "umur": "12"
+          "seat": "1D",
+          "name": "Defryan",
+          "umur": "13"
+        },
+        {
+          "seat": "1B",
+          "name": "Tridya",
+          "umur": "14"
         }
       ],
-      "totalPrice": 550000,
+      "totalPrice": 825000,
       "id": 1
     },
     {
       "idShuttle": 1,
-      "status": "Unpaid",
-      "expiredAt": "2021-03-29 12:05:13",
+      "status": "Paid",
+      "expiredAt": "",
       "idUser": "2",
       "name": "Pahala Kencana",
       "class": "Executive",
@@ -298,57 +304,51 @@
       "to": "Surabaya",
       "departureDate": "30-03-2021",
       "seat": [
-        "1A",
-        "1B",
-        "2A"
+        "1C",
+        "1D",
+        "1B"
       ],
       "detailPassenger": [
         {
-          "seat": "1A",
-          "name": null,
-          "umur": null
+          "seat": "1C",
+          "name": "Ryan",
+          "umur": "12"
+        },
+        {
+          "seat": "1D",
+          "name": "Defryan",
+          "umur": "13"
         },
         {
           "seat": "1B",
-          "name": null,
-          "umur": null
-        },
-        {
-          "seat": "2A",
-          "name": null,
-          "umur": null
+          "name": "Tridya",
+          "umur": "14"
         }
       ],
       "totalPrice": 825000,
       "id": 2
     },
     {
-      "idShuttle": 1,
-      "status": "Unpaid",
-      "expiredAt": "2021-03-29 13:35:02",
+      "idShuttle": 3,
+      "status": "Paid",
+      "expiredAt": "",
       "idUser": "2",
-      "name": "Pahala Kencana",
+      "name": "Eka Cepat",
       "class": "Executive",
       "from": "Bandung",
       "to": "Surabaya",
       "departureDate": "30-03-2021",
       "seat": [
-        "3D",
-        "4D"
+        "1D"
       ],
       "detailPassenger": [
         {
-          "seat": "3D",
-          "name": null,
-          "umur": null
-        },
-        {
-          "seat": "4D",
+          "seat": "1D",
           "name": null,
           "umur": null
         }
       ],
-      "totalPrice": 550000,
+      "totalPrice": 225000,
       "id": 3
     }
   ]
