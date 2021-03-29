@@ -261,7 +261,7 @@
     {
       "idShuttle": 1,
       "status": "Unpaid",
-      "expiredAt": "2021-03-29 11:10:28",
+      "expiredAt": "2021-03-29 11:55:45",
       "idUser": "2",
       "name": "Pahala Kencana",
       "class": "Executive",
@@ -270,28 +270,86 @@
       "departureDate": "30-03-2021",
       "seat": [
         "1D",
-        "2D",
-        "3D"
+        "2D"
       ],
       "detailPassenger": [
         {
           "seat": "1D",
-          "name": null,
-          "umur": null
+          "name": "Ryan",
+          "umur": "12"
         },
         {
           "seat": "2D",
+          "name": "Fandi Ario",
+          "umur": "12"
+        }
+      ],
+      "totalPrice": 550000,
+      "id": 1
+    },
+    {
+      "idShuttle": 1,
+      "status": "Unpaid",
+      "expiredAt": "2021-03-29 12:05:13",
+      "idUser": "2",
+      "name": "Pahala Kencana",
+      "class": "Executive",
+      "from": "Bandung",
+      "to": "Surabaya",
+      "departureDate": "30-03-2021",
+      "seat": [
+        "1A",
+        "1B",
+        "2A"
+      ],
+      "detailPassenger": [
+        {
+          "seat": "1A",
           "name": null,
           "umur": null
         },
         {
-          "seat": "3D",
+          "seat": "1B",
+          "name": null,
+          "umur": null
+        },
+        {
+          "seat": "2A",
           "name": null,
           "umur": null
         }
       ],
       "totalPrice": 825000,
-      "id": 1
+      "id": 2
+    },
+    {
+      "idShuttle": 1,
+      "status": "Unpaid",
+      "expiredAt": "2021-03-29 13:35:02",
+      "idUser": "2",
+      "name": "Pahala Kencana",
+      "class": "Executive",
+      "from": "Bandung",
+      "to": "Surabaya",
+      "departureDate": "30-03-2021",
+      "seat": [
+        "3D",
+        "4D"
+      ],
+      "detailPassenger": [
+        {
+          "seat": "3D",
+          "name": null,
+          "umur": null
+        },
+        {
+          "seat": "4D",
+          "name": null,
+          "umur": null
+        }
+      ],
+      "totalPrice": 550000,
+      "id": 3
     }
   ]
 }

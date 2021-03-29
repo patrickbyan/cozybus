@@ -1,5 +1,3 @@
-import { act } from "react-test-renderer"
-
 let initialState = {
     shuttleList: null,
     errorList: null,

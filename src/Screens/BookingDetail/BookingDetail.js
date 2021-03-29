@@ -21,23 +21,6 @@ import 'moment-timezone'
 const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter}) => {
     const [selectedSeat, setSelectedSeat] = useState([])
     const [passenger, setPassenger] = useState([])
-    // [
-    //     {
-    //         seat: '1D',
-    //         nama: null, 
-    //         umur: null,
-    //     },
-    //     {
-    //         seat: '2D',
-    //         nama: null, 
-    //         umur: null,
-    //     },
-    //     {
-    //         seat: '3D',
-    //         nama: null, 
-    //         umur: null,
-    //     }
-    // ]
 
     useEffect(() => {
         setSelectedSeat(route.params.seat) // [1D, 2D, 3D]
@@ -117,7 +100,8 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter}
 
         Axios.post(urlAPI + '/transactions', {...dataToSend})
         .then((res) => {
-            console.log(res)
+            console.log(res.data.id)
+            navigate('Payment', {idTransaction: res.data.id})
         })
         .catch((err) => {
             console.log(err)
