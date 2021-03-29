@@ -63,18 +63,23 @@ const BookingDetail = ({route, navigation: {navigate}, navigation}) => {
         console.log(input)
         console.log(inputType)
 
+        // 1. Super Copy state Passenger
         let arrPassenger = [...passenger]
 
-        // for(let i=0; i < passenger.length; i++){
-        //     if(passenger[i].seat === seatNumber){
-        //         console.log(passenger[i])
-        //         console.log(i)
+        // 2. Lakukan Looping didalam arrPassenger
+        for(let i=0; i < arrPassenger.length; i++){
+            // 3. Setiap kali looping kita samakan data seat number
+            if(arrPassenger[i].seat === seatNumber){
+                // 4. Check input type
+                if(inputType === 'nama'){
+                    arrPassenger[i].name = input
+                }else if(inputType === 'umur'){
+                    arrPassenger[i].umur = input
+                }
+            }
 
-        //         arrPassenger[i].nama = input
-
-        //         setPassenger = [arrPassenger]
-        //     }
-        // }
+            setPassenger(arrPassenger)
+        }
     }
 
     const onCheck = () => {

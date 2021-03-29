@@ -1,21 +1,25 @@
-import React from 'react'
-import { Button, Container, Text } from 'native-base'
+import React, {useState} from 'react'
+import { Button, Container, Content, Grid, Row, Text } from 'native-base'
 import {connect} from 'react-redux'
 
 // Redux
 import {onUserLogout} from './../../Redux/Actions/UserAction'
 
 const Profile = ({onUserLogout}) => {
+
     return(
         <Container>
-            <Text>
-                Ini Profile
-            </Text>
-            <Button onPress={onUserLogout}>
-                <Text>
-                    Logout
-                </Text>
-            </Button>
+            <Content>
+                <Grid>
+                    <Row style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <Button onPress={onUserLogout}>
+                            <Text>
+                                Logout
+                            </Text>
+                        </Button>
+                    </Row>
+                </Grid>
+            </Content>
         </Container>
     )
 }
