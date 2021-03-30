@@ -19,3 +19,22 @@ export const getDataTransaction = (idTransaction) => {
 
     }
 }
+
+export const getAllDataTransaction = (idUser) => {
+    return (dispatch) => {
+
+        axios.get(urlAPI + `/transactions?idUser=${idUser}`)
+        .then((res) => {
+            dispatch(
+                {
+                    type: 'GET_ALL_DATA_TRANSACTION_SUCCESS',
+                    payload: res.data
+                }
+            )
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
+    }
+}

@@ -18,7 +18,10 @@ import spacing from './../../Supports/Styles/Spacing'
 import Moment from 'moment'
 import 'moment-timezone'
 
-const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter}) => {
+// Action 
+import {getAllDataTransaction} from './../../Redux/Actions/TransactionAction'
+
+const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter, getAllDataTransaction}) => {
     const [selectedSeat, setSelectedSeat] = useState([])
     const [passenger, setPassenger] = useState([])
 
@@ -100,7 +103,7 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter}
 
         Axios.post(urlAPI + '/transactions', {...dataToSend})
         .then((res) => {
-            console.log(res.data.id)
+            getAllDataTransaction(user.id)
             navigate('Payment', {idTransaction: res.data.id})
         })
         .catch((err) => {
@@ -184,6 +187,10 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter}
     )
 }
 
+const mapDispatchToProps = {
+    getAllDataTransaction
+}
+
 const mapStateToProps = (state) => {
     return{
         user: state.user,
@@ -191,4 +198,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, '')(BookingDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(BookingDetail)

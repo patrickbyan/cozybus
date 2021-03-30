@@ -47,7 +47,8 @@ const Payment = ({navigation, route, getDataTransaction, transactions}) => {
     const onPay = () => {
         axios.patch(urlAPI + `/transactions/${route.params.idTransaction}`, {status: 'Paid', expiredAt: ''})
         .then((res) => {
-            getDataTransaction(route.params.idTransaction)
+            // Setelah berhasil nge-patch data -> Action untuk get data terbarunya
+            getDataTransaction(route.params.idTransaction) 
         })
         .catch((err) => {
             console.log(err)
