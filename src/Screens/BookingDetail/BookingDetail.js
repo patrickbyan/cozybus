@@ -84,7 +84,7 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
         // detailPassenger : passenger (state)
         // totalPrice : route.params.price
 
-        let expiredAt = Moment(new Date()).add({minutes: 15}).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
+        let expiredAt = Moment(new Date()).add({second: 10}).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
 
         let dataToSend = {
             idShuttle: route.params.idShuttle,

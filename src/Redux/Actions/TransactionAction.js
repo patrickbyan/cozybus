@@ -21,7 +21,7 @@ export const getDataTransaction = (idTransaction) => {
 }
 
 export const getExpiredAt = (expiredAt) => {
-    console.log(expiredAt)
+    console.log('Action Expired At:' + expiredAt)
     return{
         type: 'GET_DATA_EXPIREDAT',
         payload: expiredAt

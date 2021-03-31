@@ -20,18 +20,27 @@ import {getAllDataTransaction, getDataTransaction} from './../../Redux/Actions/T
 import axios from 'axios';
 import { urlAPI } from '../../Supports/Constants/urlAPI';
 
-const Payment = ({navigation, route, getDataTransaction, transactions}) => {
+const Payment = ({navigation, route, getDataTransaction, transactions, user}) => {
 
     useEffect(() => {
         getDataTransaction(route.params.idTransaction)
-
-        console.log(transactions)
     }, [])
 
     const onPay = () => {
         axios.patch(urlAPI + `/transactions/${route.params.idTransaction}`, {status: 'Paid', expiredAt: ''})
         .then((res) => {
             // Setelah berhasil nge-patch data -> Action untuk get data terbarunya
+            getDataTransaction(route.params.idTransaction) 
+            getAllDataTransaction(user.id)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
+    const onTransactionExpired = () => {
+        axios.patch(urlAPI + `/transactions/${route.params.idTransaction}`, {status: 'Cancelled', expiredAt: ''})
+        .then((res) => {
             getDataTransaction(route.params.idTransaction) 
             getAllDataTransaction(user.id)
         })
@@ -86,8 +95,7 @@ const Payment = ({navigation, route, getDataTransaction, transactions}) => {
                                 <CountDown
                                     until={transactions.expiredAt}
                                     // Ketika onFinish, function ubah status : Unpaid -> Cancelled
-                                    onFinish={() => alert('finished')}
-                                    onPress={() => alert('hello')}
+                                    onFinish={onTransactionExpired}
                                     timeLabels={{m: null, s: null}}
                                     timeToShow={['M', 'S']}
                                     size={12}
@@ -189,6 +197,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => {
     return{
+        user: state.user,
         transactions: state.transactions
     }
 }

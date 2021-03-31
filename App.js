@@ -21,12 +21,23 @@ import {onSaveAsyncStroage} from './src/Redux/Actions/UserAction'
 // Splash Screen
 import Splash from './src/Screens/Splash/Splash'
 
+// OneSignal
+import OneSignal from 'react-native-onesignal'
+
 const App = ({user, onSaveAsyncStroage}) => {
 
   const [isLogin, setIsLogin] = useState(false)
 
-  useEffect(() => {
+  useEffect(async() => {
     getAsyncStorageData()
+
+    /* O N E S I G N A L   S E T U P */
+    OneSignal.setAppId("75f0a044-a7bf-4e97-940b-cb24f61c0ee9");
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.setRequiresUserPrivacyConsent(false);
+    OneSignal.promptForPushNotificationsWithUserResponse(response => {
+        console.log("Prompt response:", response);
+    });
   }, [])
 
   const getAsyncStorageData = () => {

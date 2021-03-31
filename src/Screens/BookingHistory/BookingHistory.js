@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { Body, Header, Col, Content, Grid, Text, Row, Container, Title, Button, Spinner } from 'native-base'
-import { TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View, ScrollView, RefreshControl } from 'react-native'
 import {connect} from 'react-redux'
 
 // Styles
@@ -9,20 +9,42 @@ import Color from './../../Supports/Styles/Color'
 import Font from '../../Supports/Styles/Typography'
 
 // Action
-import {getAllDataTransaction} from './../../Redux/Actions/TransactionAction'
+import {getAllDataTransaction, getExpiredAt} from './../../Redux/Actions/TransactionAction'
 
 // Icon
 import Icon from 'react-native-vector-icons/Ionicons'
 
-const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: {navigate}}) => {
+// Moment
+import Moment from 'moment'
+import 'moment-timezone'
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: {navigate}, getExpiredAt}) => {
+
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         console.log('Runnn')
         getAllDataTransaction(user.id)
     }, [])
 
-    const checkData = () => {
-        console.log(transactions.allTransaction)
+    const onRefresh = () => {
+        setRefreshing(true);
+        wait(2000).then(() => setRefreshing(false));
+    }
+
+    const onPayment = (idTransaction, expiredAt) => {
+        // Expired At Convert to Second
+        let now = Moment(new Date()).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
+        let different = Moment.duration(Moment(expiredAt).diff(Moment(now)))
+        let second = different.asSeconds()
+        
+        getExpiredAt(second)
+
+        navigate('Payment', {idTransaction: idTransaction})
     }
 
     if(transactions.allTransaction === null){
@@ -42,7 +64,15 @@ const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: 
     }
 
     return(
-        <Container>
+        <ScrollView
+                refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+                }
+        >
+            <Container>
             <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
                 <Title style={{...Color.light}}>
                     Booking History
@@ -53,7 +83,7 @@ const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: 
                     transactions.allTransaction.length > 0?
                         transactions.allTransaction.map((value, index) => {
                             return(
-                                <View key={index} onPress={() => navigation.navigate('Payment')} style={{...Spacing.mtFive,  ...Spacing.mxFive, borderColor: 'grey', borderWidth: 0.3, borderRadius: 3, elevation: 2, backgroundColor: 'white'}}>
+                                <View key={index} style={{...Spacing.mtFive,  ...Spacing.mxFive, borderColor: 'grey', borderWidth: 0.3, borderRadius: 3, elevation: 2, backgroundColor: 'white'}}>
                                     <Grid style={{...Spacing.mxFive, ...Spacing.mtFive, ...Spacing.mbTwo, borderBottomColor: 'grey', borderBottomWidth: 0.3}}>
                                         <Col>
                                             <Text style={{color: 'green'}}>
@@ -61,11 +91,16 @@ const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: 
                                             </Text>
                                         </Col>
                                         <Col>
-                                            <TouchableOpacity onPress={() => navigate('Payment', {idTransaction: value.id})} style={{height: 30}} >
-                                                <Text style={{fontStyle: 'italic', ...Color.primary}}>
-                                                    Pay Now?
-                                                </Text>
-                                            </TouchableOpacity>
+                                            {
+                                                value.status === 'Unpaid'?
+                                                    <TouchableOpacity onPress={() => onPayment(value.id, value.expiredAt)}  style={{height: 30}} >
+                                                        <Text style={{fontStyle: 'italic', ...Color.primary}}>
+                                                            Pay Now?
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                :
+                                                    null
+                                            }
                                         </Col>
                                         <Col>
                                             <Text style={{...Spacing.mlThree, ...Spacing.mbTwo, textAlign: 'right'}}>
@@ -96,10 +131,17 @@ const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: 
                                             {value.name}
                                         </Text>
                                     </View>
-                                    <Grid>
+                                    <Grid style={{...Spacing.pxFive, ...Spacing.mbThree}}>
                                         <Row>
                                             <Text>
                                                 Expired At : {value.expiredAt}
+                                            </Text>
+                                        </Row>
+                                    </Grid>
+                                    <Grid style={{...Spacing.pxFive, ...Spacing.mbThree}}>
+                                        <Row>
+                                            <Text>
+                                                Seat Number : {value.seat}
                                             </Text>
                                         </Row>
                                     </Grid>
@@ -120,11 +162,12 @@ const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: 
                 }
             </Content>
         </Container>
+      </ScrollView>
     )
 }
 
 const mapDispatchToProps = {
-    getAllDataTransaction
+    getAllDataTransaction, getExpiredAt
 }
 
 const mapStateToProps = (state) => {
