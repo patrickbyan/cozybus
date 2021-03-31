@@ -19,9 +19,9 @@ import Moment from 'moment'
 import 'moment-timezone'
 
 // Action 
-import {getAllDataTransaction} from './../../Redux/Actions/TransactionAction'
+import {getAllDataTransaction, getExpiredAt} from './../../Redux/Actions/TransactionAction'
 
-const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter, getAllDataTransaction}) => {
+const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter, getAllDataTransaction, getExpiredAt}) => {
     const [selectedSeat, setSelectedSeat] = useState([])
     const [passenger, setPassenger] = useState([])
 
@@ -100,6 +100,14 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
             detailPassenger: passenger,
             totalPrice: route.params.price
         }
+
+        // Expired At Convert to Second
+        let now = Moment(new Date()).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
+        let different = Moment.duration(Moment(expiredAt).diff(Moment(now)))
+        let second = different.asSeconds()
+        
+        getExpiredAt(second)
+        // 
 
         Axios.post(urlAPI + '/transactions', {...dataToSend})
         .then((res) => {
@@ -188,7 +196,7 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
 }
 
 const mapDispatchToProps = {
-    getAllDataTransaction
+    getAllDataTransaction, getExpiredAt
 }
 
 const mapStateToProps = (state) => {

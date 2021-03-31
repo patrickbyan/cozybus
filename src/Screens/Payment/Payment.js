@@ -16,46 +16,31 @@ import Icon1 from 'react-native-vector-icons/Ionicons'
 import spacing from './../../Supports/Styles/Spacing'
 
 // Action
-import {getDataTransaction} from './../../Redux/Actions/TransactionAction'
+import {getAllDataTransaction, getDataTransaction} from './../../Redux/Actions/TransactionAction'
 import axios from 'axios';
 import { urlAPI } from '../../Supports/Constants/urlAPI';
 
 const Payment = ({navigation, route, getDataTransaction, transactions}) => {
 
-    const [countExpired, setCountExpired] = useState(null)
-
     useEffect(() => {
         getDataTransaction(route.params.idTransaction)
 
-        if(transactions.dataTransaction !== null){
-            console.log('Expired At' + transactions.dataTransaction.expiredAt)
-            expiretTransactions()
-        }
+        console.log(transactions)
     }, [])
 
-
-    const expiretTransactions = () => {
-        let expiredAt = transactions.dataTransaction.expiredAt
-        let now = Moment(new Date()).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
-
-        let different = Moment.duration(Moment(expiredAt).diff(Moment(now)))
-        let second = different.asSeconds()
-        console.log('Second' + second)
-
-        setCountExpired(second)
-    }
     const onPay = () => {
         axios.patch(urlAPI + `/transactions/${route.params.idTransaction}`, {status: 'Paid', expiredAt: ''})
         .then((res) => {
             // Setelah berhasil nge-patch data -> Action untuk get data terbarunya
             getDataTransaction(route.params.idTransaction) 
+            getAllDataTransaction(user.id)
         })
         .catch((err) => {
             console.log(err)
         })
     }
 
-    if(transactions.dataTransaction === null && countExpired === null){
+    if(transactions.dataTransaction === null){
         return(
             <Container>
                 <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
@@ -99,7 +84,7 @@ const Payment = ({navigation, route, getDataTransaction, transactions}) => {
                         {
                             transactions.dataTransaction.status === 'Unpaid'?
                                 <CountDown
-                                    until={countExpired? countExpired : 900}
+                                    until={transactions.expiredAt}
                                     // Ketika onFinish, function ubah status : Unpaid -> Cancelled
                                     onFinish={() => alert('finished')}
                                     onPress={() => alert('hello')}

@@ -20,6 +20,14 @@ export const getDataTransaction = (idTransaction) => {
     }
 }
 
+export const getExpiredAt = (expiredAt) => {
+    console.log(expiredAt)
+    return{
+        type: 'GET_DATA_EXPIREDAT',
+        payload: expiredAt
+    }
+}
+
 export const getAllDataTransaction = (idUser) => {
     return (dispatch) => {
 

@@ -83,6 +83,7 @@ export const onUserLogout = () => {
 }
 
 export const onUserLogin = (inputEmail, inputPassword) => {
+    console.log('Running')
     return (dispatch) => {
         
         Axios.get(urlAPI + `/users?email=${inputEmail}&password=${inputPassword}`)
@@ -115,6 +116,7 @@ export const onUserLogin = (inputEmail, inputPassword) => {
             }
         })
         .catch((err) => {
+            console.log(err)
             dispatch(
                 {
                     type: 'AUTH_FAILED',
