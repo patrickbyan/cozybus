@@ -20,7 +20,7 @@ import 'moment-timezone'
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
-  }
+}
 
 const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: {navigate}, getExpiredAt}) => {
 

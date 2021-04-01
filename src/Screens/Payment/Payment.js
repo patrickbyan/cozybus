@@ -20,7 +20,7 @@ import {getAllDataTransaction, getDataTransaction} from './../../Redux/Actions/T
 import axios from 'axios';
 import { urlAPI } from '../../Supports/Constants/urlAPI';
 
-const Payment = ({navigation, route, getDataTransaction, transactions, user}) => {
+const Payment = ({navigation, route, getDataTransaction, transactions, user, getAllDataTransaction}) => {
 
     useEffect(() => {
         getDataTransaction(route.params.idTransaction)
@@ -39,10 +39,14 @@ const Payment = ({navigation, route, getDataTransaction, transactions, user}) =>
     }
 
     const onTransactionExpired = () => {
+        console.log('Transaction Expired Runnn')
         axios.patch(urlAPI + `/transactions/${route.params.idTransaction}`, {status: 'Cancelled', expiredAt: ''})
         .then((res) => {
-            getDataTransaction(route.params.idTransaction) 
-            getAllDataTransaction(user.id)
+            if(res.data){
+                console.log('Patch Success')
+                getDataTransaction(route.params.idTransaction) 
+                getAllDataTransaction(user.id)
+            }
         })
         .catch((err) => {
             console.log(err)
@@ -192,7 +196,7 @@ const Payment = ({navigation, route, getDataTransaction, transactions, user}) =>
 }
 
 const mapDispatchToProps = {
-    getDataTransaction
+    getDataTransaction, getAllDataTransaction
 }
 
 const mapStateToProps = (state) => {

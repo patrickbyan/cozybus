@@ -258,5 +258,51 @@
     }
   ],
   "transactions": [
+    {
+      "idShuttle": 1,
+      "status": "Cancelled",
+      "expiredAt": "",
+      "idUser": "2",
+      "name": "Pahala Kencana",
+      "class": "Executive",
+      "from": "Bandung",
+      "to": "Surabaya",
+      "departureDate": "01-04-2021",
+      "seat": [
+        "1A"
+      ],
+      "detailPassenger": [
+        {
+          "seat": "1A",
+          "name": null,
+          "umur": null
+        }
+      ],
+      "totalPrice": 275000,
+      "id": 1
+    },
+    {
+      "idShuttle": 5,
+      "status": "Cancelled",
+      "expiredAt": "",
+      "idUser": "2",
+      "name": "DayTrans",
+      "class": "Executive",
+      "from": "Bandung",
+      "to": "Tangerang",
+      "departureDate": "01-04-2021",
+      "seat": [
+        "1A"
+      ],
+      "detailPassenger": [
+        {
+          "seat": "1A",
+          "name": null,
+          "umur": null
+        }
+      ],
+      "totalPrice": 105000,
+      "id": 2
+    }
   ]
 }
