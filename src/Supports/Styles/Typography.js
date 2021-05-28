@@ -1,58 +1,32 @@
 const { StyleSheet } = require('react-native');
 
-const One = 10
-const Two = 12
-const Three = 15
-const Four = 18
-const Five = 20
-const Six = 25
-const Seven = 30
-const Eight = 35
-const Nine = 45
-const Ten = 50
+const fs_10 = 10 // 1
+const fs_12 = 12 // 2
+const fs_15 = 15 // 3
+const fs_18 = 18 // 4
+const fs_20 = 20 // 5
+const fs_25 = 25 // 6
+const fs_30 = 30 // 7
+const fs_35 = 35 // 8
+const fs_45 = 45 // 9
+const fs_50 = 50 // 10
 
 const typography = StyleSheet.create({
-    fsOne : {
-        fontSize : One
-    },
-    fsTwo : {
-        fontSize : Two
-    },
-    fsThree : {
-        fontSize : Three
-    },
-    fsFour : {
-        fontSize : Four
-    },
-    fsFive : {
-        fontSize : Five
-    },
-    fsSix : {
-        fontSize : Six
-    },
-    fsSeven : {
-        fontSize : Seven
-    },
-    fsEight : {
-        fontSize : Eight
-    },
-    fsNine : {
-        fontSize : Nine
-    },
-    fsTen : {
-        fontSize : Ten
-    },
+    fs_10 : { fontSize : fs_10 },
+    fs_12 : { fontSize : fs_12 },
+    fs_15 : { fontSize : fs_15 },
+    fs_18 : { fontSize : fs_18 },
+    fs_20 : { fontSize : fs_20 },
+    fs_25 : { fontSize : fs_25 },
+    fs_30 : { fontSize : fs_30 },
+    fs_35 : { fontSize : fs_35 },
+    fs_45 : { fontSize : fs_45 },
+    fs_50 : { fontSize : fs_50 },
 
 
-    fStyleLight : {
-        fontWeight : '100'
-    },
-    fStyleBold : {
-        fontWeight : 'bold'
-    },
-    fStyleItalic : {
-        fontStyle : 'italic'
-    }
+    fw_light : { fontWeight : '100' },
+    fw_bold : { fontWeight : 'bold' },
+    fst_italic : { fontStyle : 'italic' }
 })
 
 export default typography

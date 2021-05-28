@@ -1,47 +1,34 @@
-import React, {useEffect, useState, useRef} from 'react'
-import { Body, Header, Col, Content, Grid, Text, Row, Container, Title, Button, Spinner } from 'native-base'
-import { TouchableOpacity, View, ScrollView, RefreshControl } from 'react-native'
+import React, {useEffect} from 'react'
+import { Body, Header, Col, Content, Grid, Icon, Text, Row, Container, Title, Button, Spinner, Tabs, Tab } from 'native-base'
+import { TouchableOpacity, View } from 'react-native'
 import {connect} from 'react-redux'
 
 // Styles
-import Spacing from './../../Supports/Styles/Spacing'
-import Color from './../../Supports/Styles/Color'
-import Font from '../../Supports/Styles/Typography'
+import spacing from './../../Supports/Styles/Spacing'
+import color from './../../Supports/Styles/Color'
+import font from '../../Supports/Styles/Typography'
+
+import Splash from '../Splash/Splash'
 
 // Action
 import {getAllDataTransaction, getExpiredAt} from './../../Redux/Actions/TransactionAction'
-
-// Icon
-import Icon from 'react-native-vector-icons/Ionicons'
 
 // Moment
 import Moment from 'moment'
 import 'moment-timezone'
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
-const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: {navigate}, getExpiredAt}) => {
-
-    const [refreshing, setRefreshing] = useState(false);
-
+const BookingHistory = ({navigation: {navigate}, getAllDataTransaction, user, transactions, getExpiredAt}) => {
     useEffect(() => {
-        console.log('Runnn')
+        console.log('masuk')
         getAllDataTransaction(user.id)
     }, [])
 
-    const onRefresh = () => {
-        setRefreshing(true);
-        wait(2000).then(() => setRefreshing(false));
-    }
-
     const onPayment = (idTransaction, expiredAt) => {
-        // Expired At Convert to Second
         let now = Moment(new Date()).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
-        let different = Moment.duration(Moment(expiredAt).diff(Moment(now)))
-        let second = different.asSeconds()
-        
+        let diff = Moment.duration(Moment(expiredAt).diff(Moment(now)))
+        let second = diff.asSeconds()
+
         getExpiredAt(second)
 
         navigate('Payment', {idTransaction: idTransaction})
@@ -49,120 +36,175 @@ const BookingHistory = ({getAllDataTransaction, user, transactions, navigation: 
 
     if(transactions.allTransaction === null){
         return(
-            <Container>
-                <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
-                    <Title style={{...Color.light}}>
-                        Booking History
-                    </Title>
-                </Header>
-                <Spinner color='red' />
-                <Text style={{textAlign: 'center', ...Font.fsFive}}>
-                    Loading
-                </Text>
-            </Container>
+            <Splash />
         )
     }
 
     return(
-        <ScrollView
-                refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />
-                }
-        >
-            <Container>
-            <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
-                <Title style={{...Color.light}}>
+        <Container>
+            <Header hasTabs style={{alignItems: 'center'}}>
+                <Title style={{...color.light}}>
                     Booking History
                 </Title>
             </Header>
-            <Content>
-                {
-                    transactions.allTransaction.length > 0?
-                        transactions.allTransaction.map((value, index) => {
-                            return(
-                                <View key={index} style={{...Spacing.mtFive,  ...Spacing.mxFive, borderColor: 'grey', borderWidth: 0.3, borderRadius: 3, elevation: 2, backgroundColor: 'white'}}>
-                                    <Grid style={{...Spacing.mxFive, ...Spacing.mtFive, ...Spacing.mbTwo, borderBottomColor: 'grey', borderBottomWidth: 0.3}}>
-                                        <Col>
-                                            <Text style={{color: 'green'}}>
-                                                {value.status}
-                                            </Text>
-                                        </Col>
-                                        <Col>
-                                            {
-                                                value.status === 'Unpaid'?
-                                                    <TouchableOpacity onPress={() => onPayment(value.id, value.expiredAt)}  style={{height: 30}} >
-                                                        <Text style={{fontStyle: 'italic', ...Color.primary}}>
-                                                            Pay Now?
+            <Tabs>
+                <Tab heading="Selesai">
+                    <Content>
+                        {
+                            transactions.allTransaction.length > 0?
+                                transactions.allTransaction.map((value, index) => {
+                                    if(value.status === 'Paid' || value.status === 'Unpaid'){
+                                        return(
+                                            <View key={index} style={{...spacing.mt_20,  ...spacing.mx_20, bordercolor: 'grey', borderWidth: 0.3, borderRadius: 3, ...color.bg_light}}>
+                                                <Grid style={{...spacing.mx_20, ...spacing.mt_20, ...spacing.mb_8, borderBottomcolor: 'grey', borderBottomWidth: 0.3}}>
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={{...color.success}}>
+                                                                {value.status}
+                                                            </Text>
+                                                        </Col>
+                                                        <Col>
+                                                            <Text style={{...spacing.ml_8, ...spacing.mb_8, textAlign: 'right'}}>
+                                                                {value.departureDate}
+                                                            </Text>
+                                                        </Col>
+                                                    </Row>
+                                                    <Col>
+                                                        <Text>
+                                                            {value.seat}
                                                         </Text>
-                                                    </TouchableOpacity>
-                                                :
-                                                    null
-                                            }
-                                        </Col>
-                                        <Col>
-                                            <Text style={{...Spacing.mlThree, ...Spacing.mbTwo, textAlign: 'right'}}>
-                                                {value.departureDate}
-                                            </Text>
-                                        </Col>
-                                    </Grid>
-                                    <Grid style={{...Spacing.mxFive, alignItems: 'center'}}>
-                                        <Col>
-                                            <Text style={{color:'grey', ...Font.fsFifteen}}>
-                                                From
-                                            </Text>
-                                            <Text>
-                                                {value.from}
-                                            </Text>
-                                        </Col>
-                                        <Col>
-                                            <Text style={{textAlign: 'right', color:'grey', ...Font.fsFifteen}}>
-                                                To
-                                            </Text>
-                                            <Text style={{textAlign: 'right'}}>
-                                                {value.to}
-                                            </Text>
-                                        </Col>
-                                    </Grid>
-                                    <View style={{...Spacing.mxFive, ...Spacing.mbTwo, ...Spacing.mtTwo}}>
-                                        <Text>
-                                            {value.name}
-                                        </Text>
-                                    </View>
-                                    <Grid style={{...Spacing.pxFive, ...Spacing.mbThree}}>
-                                        <Row>
-                                            <Text>
-                                                Expired At : {value.expiredAt}
-                                            </Text>
-                                        </Row>
-                                    </Grid>
-                                    <Grid style={{...Spacing.pxFive, ...Spacing.mbThree}}>
-                                        <Row>
-                                            <Text>
-                                                Seat Number : {value.seat}
-                                            </Text>
-                                        </Row>
-                                    </Grid>
-                                </View> 
-                            )
-                        })
-                    :
-                        <Grid style={{...Spacing.mtFive}}>
-                            <Row style={{justifyContent: 'center'}}>
-                                <Icon name='close-circle-outline' style={{...Font.fsSeven}} />
-                            </Row>
-                            <Row style={{justifyContent: 'center'}}>
-                                <Text>
-                                    Booking Still Empty
+                                                    </Col>
+                                                    <Col>
+                                                    {
+                                                        value.status === 'Unpaid'?
+                                                            <TouchableOpacity onPress={() => onPayment(value.id, value.expiredAt)} style={{height: 30}} >
+                                                                <Text style={{...font.fst_italic, ...color.primary}}>
+                                                                    Pay Now?
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                        :
+                                                            null
+                                                    }
+                                                    </Col>
+                                                </Grid>
+                                                <Grid style={{...spacing.mx_20, alignItems: 'center'}}>
+                                                    <Col>
+                                                        <Text style={{...color.muted, ...font.fs_15}}>
+                                                            From
+                                                        </Text>
+                                                        <Text>
+                                                            {value.from}
+                                                        </Text>
+                                                    </Col>
+                                                    <Col>
+                                                        <Text style={{textAlign: 'right', ...color.muted, ...font.fs_15}}>
+                                                            To
+                                                        </Text>
+                                                        <Text style={{textAlign: 'right'}}>
+                                                            {value.to}
+                                                        </Text>
+                                                    </Col>
+                                                </Grid>
+                                                <Grid style={{...spacing.mx_20, alignItems: 'center'}}>
+                                                    <Col>
+                                                        <Text>
+                                                            {value.name}
+                                                        </Text>
+                                                    </Col>
+                                                    <Col>
+                                                        <Text style={{textAlign: 'right'}}>
+                                                            {value.expiredAt}
+                                                        </Text>
+                                                    </Col>
+                                                </Grid>
+                                            </View> 
+                                        )
+                                    }
+                                })
+                            :
+                                <Text style={{textAlign: 'center', ...color.muted}}>
+                                    There's no success booking yet
                                 </Text>
-                            </Row>
-                        </Grid>
-                }
-            </Content>
+                        }
+                    </Content>
+                </Tab>
+                <Tab heading="Telah Dibatalkan">
+                    <Content>
+                        {
+                            transactions.allTransaction.length > 0?
+                                transactions.allTransaction.map((value, index) => {
+                                    if(value.status === 'Cancelled'){
+                                        return(
+                                            <View key={index} style={{...spacing.mt_20,  ...spacing.mx_20, bordercolor: 'grey', borderWidth: 0.3, borderRadius: 3, elevation: 2, backgroundcolor: 'white'}}>
+                                                <Grid style={{...spacing.mx_20, ...spacing.mt_20, ...spacing.mb_8, borderBottomcolor: 'grey', borderBottomWidth: 0.3}}>
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={{color: 'green'}}>
+                                                                {value.status}
+                                                            </Text>
+                                                        </Col>
+                                                        <Col>
+                                                            <Text style={{...spacing.ml_8, ...spacing.mb_8, textAlign: 'right'}}>
+                                                                {value.departureDate}
+                                                            </Text>
+                                                        </Col>
+                                                    </Row>
+                                                    <Col>
+                                                        <Text>
+                                                            {value.seat}
+                                                        </Text>
+                                                    </Col>
+                                                    <Col>
+                                                    {
+                                                        value.status === 'Unpaid'?
+                                                            <TouchableOpacity onPress={() => onPayment(value.id, value.expiredAt)} style={{height: 30}} >
+                                                                <Text style={{fontStyle: 'italic', ...color.primary}}>
+                                                                    Pay Now?
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                        :
+                                                            null
+                                                    }
+                                                    </Col>
+                                                </Grid>
+                                                <Grid style={{...spacing.mx_20, alignItems: 'center'}}>
+                                                    <Col>
+                                                        <Text style={{...color.muted, ...font.fs_15}}>
+                                                            From
+                                                        </Text>
+                                                        <Text>
+                                                            {value.from}
+                                                        </Text>
+                                                    </Col>
+                                                    <Col>
+                                                        <Text style={{textAlign: 'right', ...color.muted, ...font.fs_15}}>
+                                                            To
+                                                        </Text>
+                                                        <Text style={{textAlign: 'right'}}>
+                                                            {value.to}
+                                                        </Text>
+                                                    </Col>
+                                                </Grid>
+                                                <Grid style={{...spacing.mx_20, alignItems: 'center'}}>
+                                                    <Col>
+                                                        <Text style={{textAlign: 'right'}}>
+                                                            {value.expiredAt}
+                                                        </Text>
+                                                    </Col>
+                                                </Grid>
+                                            </View> 
+                                        )
+                                    }
+                                })
+                            :
+                                <Text style={{textAlign: 'center', ...color.muted}}>
+                                    There's no cancelled booking yet
+                                </Text>
+                        }
+                    </Content>
+                </Tab>
+            </Tabs>
         </Container>
-      </ScrollView>
     )
 }
 

@@ -1,7 +1,8 @@
 let initialState = {
     dataTransaction: null,
     expiredAt: null,
-    allTransaction: null
+    allTransaction: null,
+    userContact: null
 }
 
 const transactionReducer = (state = initialState, action) => {
@@ -11,8 +12,9 @@ const transactionReducer = (state = initialState, action) => {
         case 'GET_DATA_EXPIREDAT':
             return { ...state, expiredAt: action.payload }
         case 'GET_ALL_DATA_TRANSACTION_SUCCESS':
-            console.log('Get All Data Success')
             return { ...state, allTransaction: action.payload }
+        case 'GET_CONTACT_INFORMATION':
+            return { ...state, userContact: action.payload }
         default:
             return state
     }

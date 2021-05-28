@@ -1,0 +1,10 @@
+1. Change Directory -> database
+ngrok authtoken 1ssBUKtyj3mIhkSE5B6q81a4PHH_4Jinje4H6e1t93zhuUHSd (sampai ke save)
+
+2. open localhost
+
+3. kalau sudah nyala, change directory ke database, setelah itu: ngrok http #port
+
+C:\Important-Document\Purwadhika\Class\Mobile\cozybus
+
+style={{width: '500px', height: '100px', marginTop: '200px'}}

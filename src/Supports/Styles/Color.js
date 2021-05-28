@@ -1,59 +1,52 @@
 const { StyleSheet } = require('react-native');
 
-const Primary = '#e84545'
-const Secondary = '#2b2e4a'
-const Light = '#f8f8f8'
-const Dark = '#505050'
-const Success = '#00af91'
+const primary = '#0d6efd'
+const secondary = '#6c757d'
+const success = '#198754'
+const info = '#0dcaf0'
+const warning = '#ffc107'
+const danger = '#dc3545'
+const light = '#f8f9fa'
+const dark = '#212529'
+const muted = '#6c757d'
+
+const cb_darkblue = '#3E64FF'
+const cb_lightblue = '#5EDFFF'
+const cb_light = '#ECFCFF'
 
 const color = StyleSheet.create({
-    bgPrimary : {
-        backgroundColor : Primary
-    },
-    primary : {
-        color : Primary
-    },
-    bgSecondary : {
-        backgroundColor : Secondary
-    },
-    secondary : {
-        color : Secondary
-    },
-    bgLight : {
-        backgroundColor : Light
-    },
-    light : {
-        color : Light
-    },
-    bgDark : {
-        backgroundColor : Dark
-    },
-    dark : {
-        color : Dark
-    },
-    bgSuccess : {
-        backgroundColor : Success
-    },
-    success : {
-        color : Success
-    },
+    primary : { color : primary },
+    bg_primary : { backgroundColor : primary },
+    secondary : { color : secondary },
+    bg_secondary : { backgroundColor : secondary },
+    success : { color : success },
+    bg_success : { backgroundColor : success },
+    info : { color : info },
+    bg_info : { backgroundColor : info },
+    warning : { color : warning },
+    bg_warning : { backgroundColor : warning },
+    danger : { color : danger },
+    bg_danger : { backgroundColor : danger },
+    light : { color : light },
+    bg_light : { backgroundColor : light },
+    dark : { color : dark },
+    bg_dark : { backgroundColor : dark },
+    muted : { color: muted },
+    bg_muted : { backgroundColor: '#f3f4ed' },
+
+    cb_darkblue : { color : cb_darkblue },
+    bg_cb_darkblue : { backgroundColor : cb_darkblue },
+    cb_lightblue : { color : cb_lightblue },
+    bg_cb_lightblue : { backgroundColor : cb_lightblue },
+    cb_light : { color : cb_light },
+    bg_cb_light : { backgroundColor : cb_light },
 
 
-    bRadiusOne : {
-        borderRadius : 10
-    },
-    bRadiusTwo : {
-        borderRadius : 20
-    },
-    bRadiusThree : {
-        borderRadius : 30
-    },
-    bRadiusFour : {
-        borderRadius : 40
-    },
-    bRadiusFive : {
-        borderRadius : 50
-    }
+    rounded_1 : { borderRadius : 10 },
+    rounded_2 : { borderRadius : 20 },
+    rounded_3 : { borderRadius : 30 },
+    rounded_4 : { borderRadius : 40 },
+    rounded_5 : { borderRadius : 50 }
 })
 
 export default color

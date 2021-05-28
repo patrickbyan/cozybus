@@ -20,22 +20,11 @@ export const getDataTransaction = (idTransaction) => {
     }
 }
 
-export const getExpiredAt = (expiredAt) => {
-    console.log('Action Expired At:' + expiredAt)
-    return{
-        type: 'GET_DATA_EXPIREDAT',
-        payload: expiredAt
-    }
-}
-
 export const getAllDataTransaction = (idUser) => {
     console.log(idUser)
     return (dispatch) => {
-
         axios.get(urlAPI + `/transactions?idUser=${idUser}`)
         .then((res) => {
-            console.log('Get All Data Transaction')
-            console.log(res.data)
             dispatch(
                 {
                     type: 'GET_ALL_DATA_TRANSACTION_SUCCESS',
@@ -47,5 +36,12 @@ export const getAllDataTransaction = (idUser) => {
             console.log(err)
         })
 
+    }
+}
+
+export const getExpiredAt = (expiredAt) => {
+    return{
+        type: 'GET_DATA_EXPIREDAT',
+        payload: expiredAt
     }
 }

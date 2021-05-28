@@ -1,18 +1,13 @@
-import { Body, Button, Container, Content, Grid, Header, Input, Item, Label, Left, Row, Text } from 'native-base'
+import { Body, Button, Container, Content, Grid, Header, Input, Item, Label, Left, Row, Text, Icon, Title, Right } from 'native-base'
 import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import Axios from 'axios'
 import {urlAPI} from './../../Supports/Constants/urlAPI'
 
 // Styles
-import Color from './../../Supports/Styles/Color'
-import Spacing from './../../Supports/Styles/Spacing'
-import Font from './../../Supports/Styles/Typography'
-
-// Icon
-import Icon from 'react-native-vector-icons/FontAwesome'
-import Icon1 from 'react-native-vector-icons/Ionicons'
+import color from './../../Supports/Styles/Color'
 import spacing from './../../Supports/Styles/Spacing'
+import font from './../../Supports/Styles/Typography'
 
 // Moment
 import Moment from 'moment'
@@ -24,15 +19,16 @@ import {getAllDataTransaction, getExpiredAt} from './../../Redux/Actions/Transac
 const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter, getAllDataTransaction, getExpiredAt}) => {
     const [selectedSeat, setSelectedSeat] = useState([])
     const [passenger, setPassenger] = useState([])
+    const [contact, setContact] = useState({email: null, phone: null})
+    const [error, setError] = useState('')
 
     useEffect(() => {
-        setSelectedSeat(route.params.seat) // [1D, 2D, 3D]
-        console.log('idShuttle: ' + route.params.idShuttle)
+        setSelectedSeat(route.params.seat)
 
         let selectedSeat = route.params.seat
         let newArr = []
 
-        for(let i=0; i <selectedSeat.length; i++){
+        for(let i=0; i < selectedSeat.length; i++){
             newArr.push(
                 {
                     seat: selectedSeat[i],
@@ -46,10 +42,6 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
     }, [])
 
     const dataPassenger = (input, seatNumber, inputType) => {
-        console.log(seatNumber)
-        console.log(input)
-        console.log(inputType)
-
         // 1. Super Copy state Passenger
         let arrPassenger = [...passenger]
 
@@ -59,9 +51,19 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
             if(arrPassenger[i].seat === seatNumber){
                 // 4. Check input type
                 if(inputType === 'nama'){
-                    arrPassenger[i].name = input
+                    if(!input){
+                        console.log('nama tidak diisi')
+                        setError('Nama Harus Diisi')
+                    }else{
+                        arrPassenger[i].name = input
+                    }
                 }else if(inputType === 'umur'){
-                    arrPassenger[i].umur = input
+                    if(!input){
+                        console.log('umur tidak diisi')
+                        setError('Umur Harus Diisi')
+                    }else{
+                        arrPassenger[i].umur = input
+                    }
                 }
             }
 
@@ -69,46 +71,76 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
         }
     }
 
-    const onPayment = () => {
-        // Tugas 1 : Buat validasi untuk data informasi penumpang (Pastikan semua data lengkap)
-
-        // idShuttle : route.params.idShuttle 
-        //  status : 'Unpaid'
-        //  idUser : Global Store ---> User
-        //  name : route.params.name
-        // class : route.params.class
-        //  from : Global Store ---> Filter
-        // to : Global Store ---> Filter
-        // departureDate : Global Store ---> Filter
-        // seat : selectedSeat (state)
-        // detailPassenger : passenger (state)
-        // totalPrice : route.params.price
-
-        let expiredAt = Moment(new Date()).add({second: 10}).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
-
-        let dataToSend = {
-            idShuttle: route.params.idShuttle,
-            status: 'Unpaid',
-            expiredAt: expiredAt,
-            idUser: user.id,
-            name: route.params.name,
-            class: route.params.class,
-            from: filter.departure,
-            to: filter.arrival,
-            departureDate: filter.date,
-            seat: selectedSeat,
-            detailPassenger: passenger,
-            totalPrice: route.params.price
+    const onChangeContact = (input, inputType) => {
+        if(inputType === 'email'){
+            if(!input){
+                setError('Email Harus Diisi')
+            }else{
+                contact.email = input
+            }
+        }else if(inputType === 'phone'){
+            if(!input){
+                setError('Nomor Telepon Harus Diisi')
+            }else{
+                contact.phone = input
+            }
         }
 
-        // Expired At Convert to Second
+        setContact(contact)
+    }
+
+    const onPayment = () => {
+        console.log(contact, passenger)
+
+        for(let i = 0; i < passenger.length; i++){
+            if(passenger[i].name === null || passenger[i].umur === null) return setError('Isilah Informasi Penumpang')
+            if(passenger[i].name.length === 0 || passenger[i].umur.length === 0) return setError('Isilah Informasi Penumpang')
+        }
+
+        if(contact.email === null || contact.phone === null) return setError('Isilah Informasi Kontak')
+        if(contact.email.length === 0 || contact.phone.length === 0) return setError('Isilah Informasi Kontak')
+
+        if(passenger || contact){
+            setError('')
+        }
+
+        let idShuttle = route.params.idShuttle
+        let status = 'Unpaid'
+        let idUser = user.id
+        let name = route.params.name
+        let kelas = route.params.class
+        let from = filter.departure
+        let to = filter.arrival
+        let departureDate = filter.date
+        let seat = selectedSeat
+        let detailPassenger = passenger
+        let totalPrice = route.params.price
+
+        let expiredAt = Moment(new Date()).add({minutes: 15}).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
+
+        // ExpiredAt convert minutes to seconds
         let now = Moment(new Date()).utcOffset('+07:00').format('YYYY-MM-DD HH:mm:ss')
-        let different = Moment.duration(Moment(expiredAt).diff(Moment(now)))
-        let second = different.asSeconds()
+        let diff = Moment.duration(Moment(expiredAt).diff(Moment(now)))
+        let second = diff.asSeconds()
         
         getExpiredAt(second)
-        // 
 
+        let dataToSend = {
+            idShuttle: idShuttle,
+            status: status,
+            expiredAt: expiredAt,
+            idUser: idUser,
+            name: name,
+            class: kelas,
+            from: from,
+            to: to,
+            departureDate: departureDate,
+            seat: seat,
+            detailPassenger: detailPassenger,
+            totalPrice: totalPrice
+        }
+
+        
         Axios.post(urlAPI + '/transactions', {...dataToSend})
         .then((res) => {
             getAllDataTransaction(user.id)
@@ -121,39 +153,44 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
  
     return(
         <Container>
-            <Header style={{alignItems: 'center', ...Color.bgPrimary}}>
+            <Header style={{alignItems: 'center', ...color.bg_primary}}>
                 <Left>
-                    <Icon1 name='arrow-back-circle-outline' onPress={() => navigation.goBack()} style={{...Font.fsEight, ...Color.light}} />
+                    <Icon name='chevron-back-outline' onPress={() => navigation.goBack()} style={{...font.fs_35, ...color.light}} />
                 </Left>
                 <Body>
-                    <Text style={{...Font.fsFive, ...Color.light, ...Spacing.mlFive, fontWeight: 'bold'}}>
+                    <Title style={{fontWeight: 'bold'}}>
                         Booking Detail
-                    </Text>
+                    </Title>
                 </Body>
+                <Right>
+                    <Button transparent hasText>
+                        <Text></Text>
+                    </Button>
+                </Right>
             </Header>
             <Content>
-                <Grid style={{...Spacing.pxFive, ...Spacing.mtFive}}>
+                <Grid style={{...spacing.px_20, ...spacing.mt_20}}>
                     <Row>
-                        <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
+                        <Text style={{...font.fs_20, ...font.fw_bold}}>
                             Informasi Kontak
                         </Text>
                     </Row>
-                    <Row style={{...Spacing.mtThree}}>
+                    <Row style={{...spacing.mt_10}}>
                         <Item stackedLabel style={{width: '100%'}}>
                             <Label>Email</Label>
-                            <Input style={{width: '100%'}} />
+                            <Input style={{width: '100%'}} defaultValue={user.email} onChangeText={(input) => onChangeContact(input, 'email')} />
                         </Item>
                     </Row>
-                    <Row style={{...Spacing.mtThree}}>
+                    <Row style={{...spacing.mt_10}}>
                         <Item stackedLabel style={{width: '100%'}}>
                             <Label>Phone Number</Label>
-                            <Input style={{width: '100%'}} />
+                            <Input style={{width: '100%'}} onChangeText={(input) => onChangeContact(input, 'phone')} />
                         </Item>
                     </Row>
                 </Grid>
-                <Grid style={{...Spacing.pxFive, ...Spacing.mtSeven}}>
+                <Grid style={{...spacing.px_25, ...spacing.mt_30}}>
                     <Row>
-                        <Text style={{...Font.fsFive, fontWeight: 'bold'}}>
+                        <Text style={{...font.fs_20, ...font.fw_bold}}>
                             Informasi Penumpang
                         </Text>
                     </Row>
@@ -161,19 +198,19 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
                 {
                     selectedSeat.map((value, index) => {
                         return(
-                            <Grid key={index} style={{...Spacing.pxFive, ...Spacing.pyThree, ...Spacing.mxFive, ...Spacing.mbThree, ...Color.bgLight}}>
+                            <Grid key={index} style={{...spacing.px_20, ...spacing.py_10, ...spacing.mx_20, ...spacing.mb_10, ...color.bg_light}}>
                                 <Row>
-                                    <Text style={{textAlign: 'right', width: '100%', fontWeight: 'bold'}}>
+                                    <Text style={{textAlign: 'right', width: '100%', ...font.fw_bold}}>
                                         Seat : {value}
                                     </Text>
                                 </Row>
-                                <Row style={{...Spacing.mtThree}}>
+                                <Row style={{...spacing.mt_10}}>
                                     <Item stackedLabel style={{width: '100%'}}>
                                         <Label>Nama</Label>
                                         <Input onChangeText={(input) => dataPassenger(input, value, 'nama')} style={{width: '100%'}} />
                                     </Item>
                                 </Row>
-                                <Row style={{...Spacing.mtThree}}>
+                                <Row style={{...spacing.mt_10}}>
                                     <Item stackedLabel style={{width: '100%'}}>
                                         <Label>Umur</Label>
                                         <Input onChangeText={(input) => dataPassenger(input, value, 'umur')} style={{width: '100%'}} />
@@ -183,9 +220,12 @@ const BookingDetail = ({route, navigation: {navigate}, navigation, user, filter,
                         )
                     })
                 }
-                <Grid style={{...Spacing.pxFive, ...Spacing.myThree}}>
+                <Text style={{textAlign: 'center', ...color.danger, ...font.fs_15, ...spacing.mt_10}}>
+                    {error}
+                </Text>
+                <Grid style={{...spacing.my_10}}>
                     <Button onPress={onPayment} style={{width: '100%'}}>
-                        <Text style={{...Font.fsThree, width: '100%', textAlign: 'center'}}>
+                        <Text style={{...font.fs_15, width: '100%', textAlign: 'center'}}>
                             Payment
                         </Text>
                     </Button>

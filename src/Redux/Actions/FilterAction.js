@@ -12,13 +12,6 @@ export const onSetArrival = (input) => {
     }
 }
 
-export const onSetTotalSeat = (input) => {
-    return{
-        type: 'ON_SET_TOTAL_SEAT',
-        payload: input
-    }
-}
-
 export const onSetDate = (input) => {
     console.log(input)
     return{

@@ -21,7 +21,7 @@ export const onUserRegister = (inputEmail, inputPassword) => {
                     }
                 )
             }else{
-                Axios.post(urlAPI + '/users', {email: inputEmail, password: inputPassword})
+                Axios.post(urlAPI + '/users', {email: inputEmail, password: inputPassword, image: ''})
                 .then((response) => {
                     AsyncStorage.setItem('@id', (response.data.id).toString())
                     .then((resAsyncStorage) => {
@@ -31,10 +31,13 @@ export const onUserRegister = (inputEmail, inputPassword) => {
                         //     id: response.data.id,
                         //     email: response.data.email
                         // }
+                        console.log('useraction jalan')
+                        console.log(response.data)
                         dispatch(
                             {
                                 type: 'AUTH_SUCCESS',
-                                payload: response.data.id
+                                payload: response.data.id,
+                                data: response.data.email
                             }
                         )
                     })
@@ -83,9 +86,7 @@ export const onUserLogout = () => {
 }
 
 export const onUserLogin = (inputEmail, inputPassword) => {
-    console.log('Running')
     return (dispatch) => {
-        
         Axios.get(urlAPI + `/users?email=${inputEmail}&password=${inputPassword}`)
         .then((res) => {
             if(res.data.length === 1){
@@ -94,7 +95,8 @@ export const onUserLogin = (inputEmail, inputPassword) => {
                     dispatch(
                         {
                             type: 'AUTH_SUCCESS',
-                            payload: res.data[0].id
+                            payload: res.data[0].id,
+                            email: res.data[0].email
                         }
                     )
                 })
@@ -116,7 +118,6 @@ export const onUserLogin = (inputEmail, inputPassword) => {
             }
         })
         .catch((err) => {
-            console.log(err)
             dispatch(
                 {
                     type: 'AUTH_FAILED',
@@ -126,3 +127,37 @@ export const onUserLogin = (inputEmail, inputPassword) => {
         })
     }
 } 
+
+export const onPatchImage = (imageURL) => {
+    return (dispatch) => {
+        AsyncStorage.getItem('@id')
+        .then((res) => {
+            // Axios.get(urlAPI + `/users/${res}`)
+            // .then((res) => {
+            //     if(res.data.image === ""){
+            Axios.patch(urlAPI + `/users/${res}`, {image: imageURL})
+            .then((res) => {
+                if(res.status === 200){
+                    dispatch(
+                        {
+                            type: 'REPLACE_IMAGE_SUCCESS',
+                            payload: res.data.image
+                        }
+                    )
+                }else{
+                    console.log('error')
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+                // }else{
+
+                // }
+
+            })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+}

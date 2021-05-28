@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import { Container, Content, Grid, Col, Row, Text, Item, Label, Input, Button } from 'native-base'
+import { Container, Content, Icon, Text, Item, Label, Input, Button, Header, Left, Body, Title, Form, Footer } from 'native-base'
 
 // Styles
-import Color from './../../Supports/Styles/Color'
-import Spacing from './../../Supports/Styles/Spacing'
-import Font from './../../Supports/Styles/Typography'
-
-// Icon
-import Icon from 'react-native-vector-icons/FontAwesome'
+import color from './../../Supports/Styles/Color'
+import spacing from './../../Supports/Styles/Spacing'
+import font from './../../Supports/Styles/Typography'
 
 // Redux
 import {connect} from 'react-redux'
@@ -32,119 +29,107 @@ const Register = ({navigation: {navigate}, onUserRegister, user}) => {
     }
 
     const onPasswordValidation = (input) => {
-        let symbol = /[!@$%^*]/
-        let notSymbol = /[#&]/
-        
-        if(notSymbol.test(input)){
-            return setErrorInput('Symbol Yang Diperbolehkan : !@$%^*')
-        }
-
-        if(symbol.test(input[input.length-1])){
-            return setErrorInput('Symbol Tidak Boleh Diakhir')
-        }
-
-        if(input.length < 6){
-            return setErrorInput('Password Minimal 6 Karakter')
-        }
+        let symbol = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
         
         if(!symbol.test(input)){
-            return setErrorInput('Password Harus Mengandung Simbol')
+            return setErrorInput('Password Harus Memiliki Karakter Huruf Besar, Huruf Kecil, dan Angka Minimal 1 Karakter')
         }else{
             setInputPassword(input)
             setErrorInput('')
         }
     }
 
-    const submitRegister = () => {
-        onUserRegister(inputEmail, inputPassword)
+    const onConfirmPassword = (Input) => {
+        if(inputPassword !== Input) return setErrorInput('Confirm Password tidak sama dengan Password')
+
+        setErrorInput('')
     }
 
-    // const checkStore = () => {
-    //     console.log(user.error)
-    // }
+    const submitRegister = () => {
+        onUserRegister(inputEmail.toLowerCase(), inputPassword)
+    }
 
     return(
         <Container>
-            <Content>
-                <Grid style={{...Spacing.mtFive, alignItems: 'center'}}>
-                    <Col style={{...Spacing.plFive, width: '12%'}}>
-                        <Icon name='chevron-circle-left' onPress={() => navigate('Login')} style={{...Font.fsFive}} />
-                    </Col>
-                    <Col>
-                        <Text style={{...Font.fsFive, ...Font.fStyleBold}}>
-                            Register
-                        </Text>
-                    </Col>
-                </Grid>
-                <Grid> 
-                    <Row style={{...Spacing.plFive, ...Spacing.ptFive}}>
-                        <Text style={{...Font.fsSeven, ...Font.fStyleBold, ...Color.primary}}>
-                            Welcome!
-                        </Text>
-                    </Row>
-                    <Row style={{...Spacing.plFive}}>
-                        <Text style={{...Font.fsThree}}>
-                            Register your account to continue booking!
-                        </Text>
-                    </Row>
-                    <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Item floatingLabel style={{width: '100%'}}>
-                            <Label>Enter Your Email</Label>
-                            <Input name='email' onChangeText={(input) => onEmailValidation(input)} />
+            <Header>
+                <Left>
+                    <Button transparent onPress={() => navigate('Login')}>
+                        <Icon name='chevron-back-circle-outline'/>
+                    </Button>
+                </Left>
+                <Body>
+                    <Title>Register</Title>
+                </Body>
+            </Header>
+
+            <Content padder style={{...spacing.mt_10}}>
+                <Content padder>
+                    <Text style={{...font.fw_bold, ...font.fs_20}}>
+                        Register for cozybus
+                    </Text>
+                    <Text style={{...color.muted, ...font.fs_15}}>
+                        Fill in the data below to complete your registration
+                    </Text>
+                    
+                    <Form style={{...spacing.mt_30}}>
+                        <Item stackedLabel last>
+                            <Icon active name='person-outline' />
+                            <Label style={{...font.fs_12}}>Email/Phone Number</Label>
+                            <Input name="email" onChangeText={(input) => onEmailValidation(input)} />
                         </Item>
-                    </Row>
-                    <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Item floatingLabel style={{width: '100%'}}>
-                            <Label>Enter Your Password</Label>
+                        <Item stackedLabel last>
+                            <Icon active name='lock-closed-outline' />
+                            <Label style={{...font.fs_12}}>Password</Label>
                             <Input name='password' onChangeText={(input) => onPasswordValidation(input)} />
                         </Item>
-                    </Row>
-                    <Row style={{justifyContent: 'flex-end', ...Spacing.prFive}}>
-                        <Text style={{color: 'blue'}}>
-                            Forgot Password
-                        </Text>
-                    </Row>
-                    <Row style={{justifyContent: 'center', ...Spacing.prFive}}>
-                        <Text style={{color: 'red', fontStyle: 'italic'}}>
-                            {errorInput}
-                            {
-                                user.error?
-                                    user.error
-                                :
-                                    null
-                            }
-                        </Text>
-                    </Row>
-                    <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        {
-                            user.loading?
-                                <Button disabled rounded onPress={submitRegister} style={{width: '100%', ...Color.bgPrimary}}>
-                                    <Text style={{textAlign: 'center', width: '100%'}}>
-                                        Submit Data
-                                    </Text>
-                                </Button>
-                            :
-                                <Button rounded onPress={submitRegister} style={{width: '100%', ...Color.bgPrimary}}>
-                                    <Text style={{textAlign: 'center', width: '100%'}}>
-                                        Register
-                                    </Text>
-                                </Button>                        
-                        }
-                    </Row>
-                    {/* <Row style={{...Spacing.pxFive, ...Spacing.ptFive}}>
-                        <Button rounded onPress={checkStore} style={{width: '100%', ...Color.bgPrimary}}>
-                            <Text style={{textAlign: 'center', width: '100%'}}>
-                                Check Data Store
-                            </Text>
-                        </Button>
-                    </Row> */}
-                    <Row style={{justifyContent: 'center', ...Spacing.ptFive}}>
-                        <Text onPress={() => navigate('Login')}>
-                            Already have account? Login
-                        </Text>
-                    </Row>
-                </Grid>
+                        <Item stackedLabel last>
+                            <Icon active name='lock-closed-outline' />
+                            <Label style={{...font.fs_12}}>Confirm Password</Label>
+                            <Input name="confirmPassword" onChangeText={(input) => onConfirmPassword(input)} />
+                        </Item>
+                    </Form>
+                    <Text style={{textAlign: 'center', ...color.danger, ...font.fs_15, ...spacing.mt_10}}>
+                        {errorInput}{user.error? user.error : null}
+                    </Text>
+                </Content>
+
+                <Content padder>
+                    {
+                        user.loading?
+                            <Button rounded info block disabled style={{...spacing.mt_10}}>
+                                <Text>SIGN UP</Text>
+                            </Button>
+                        :
+                            <Button rounded info block onPress={submitRegister} style={{...spacing.mt_15}}>
+                                <Text>SIGN UP</Text>
+                            </Button>
+                    }
+                    <Text style={{textAlign: 'center', ...font.fw_bold, ...font.fs_15, ...spacing.mt_15}}>
+                        or sign in with
+                    </Text>
+
+                    <Button rounded block style={{...spacing.my_15, ...color.bg_light}}>
+                        <Icon name='logo-google' style={{...color.dark}}/>
+                        <Text style={{...color.dark}}>Sign up with google</Text>
+                    </Button>
+                    <Button rounded primary block>
+                        <Icon name='logo-facebook' />
+                        <Text>Sign up with facebook</Text>
+                    </Button>
+                </Content>
             </Content>
+            <Footer>
+                <Body style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <Text style={{...color.light}}>
+                        Have an account? 
+                    </Text>
+                    <Text 
+                        style={{...color.light, ...font.fw_bold, ...spacing.ml_10}} 
+                        onPress={() => navigate('Login')}>
+                        Sign In
+                    </Text>
+                </Body>
+            </Footer>
         </Container>
     )
 }

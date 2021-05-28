@@ -1,30 +1,27 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
-import { Button, Content, Grid, Input, Item, Container, Header, Body, Row, Text, Card, CardItem} from 'native-base'
+import { Button, Content, Grid, Input, Item, Container, Header, Body, Row, Text, Card, CardItem, Spinner} from 'native-base'
+import { Image } from 'react-native'
 import DatePicker from 'react-native-datepicker'
 
 // Icon
 import Icon from 'react-native-vector-icons/FontAwesome' 
 
 // Styles
-import Spacing from './../../Supports/Styles/Spacing'
-import Color from './../..//Supports/Styles/Color'
-import Font from './../../Supports/Styles/Typography'
+import spacing from './../../Supports/Styles/Spacing'
+import color from './../..//Supports/Styles/Color'
+import font from './../../Supports/Styles/Typography'
 
 // Redux
 import {onSetDeparture, onSetArrival, onSetTotalSeat, onSetDate} from './../../Redux/Actions/FilterAction'
 
-const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onSetTotalSeat, onSetDate}) => {
+const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onSetDate}) => {
     
     const [error, setError] = useState('')
 
     const onSearchShuttle = () => {
 
-        if(filter.seat > 3){
-            return setError('Jumlah Kursi Max 3')
-        }
-
-        if(filter.departure && filter.arrival && filter.date && filter.seat){
+        if(filter.departure && filter.arrival && filter.date){
             navigate('ShuttleLists', {data: filter})
             setError('')
         }else{
@@ -34,82 +31,70 @@ const Home = ({navigation: {navigate}, onSetDeparture, onSetArrival, filter, onS
     
     return(
         <Container>
-            <Header style={{...Color.bgPrimary}}>
+            <Header style={{...color.bg_primary}}>
                 <Body style={{alignItems: 'center', width: '100%'}}>
-                    <Text style={{...Font.fsFive, ...Color.light, fontStyle: 'italic', fontWeight: 'bold'}}>
-                        MyBus Apps
-                    </Text>
+                    <Image source={require('../../Supports/Images/logo.png')} style={{width: '50%', resizeMode: 'center'}} />
                 </Body>
             </Header>
-            <Content>
-                <Grid style={{alignSelf: 'center', ...Spacing.pxThree, ...Spacing.pyZero, ...Spacing.mtFive}}>
-                    <Card style={{width: '98%', borderRadius: 3}}>
-                        <CardItem>
-                            <Body>
-                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
-                                    <Item style={{width: '100%'}}>
-                                        <Icon name='map-marker' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
-                                        <Input placeholder='Berangkat Dari' onChangeText={onSetDeparture} style={{paddingVertical: 0, fontSize: 15}} />
-                                    </Item>
-                                </Row>
-                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
-                                    <Item style={{width: '100%'}}>
-                                        <Icon name='map-marker' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
-                                        <Input placeholder='Tujuan' onChangeText={onSetArrival} style={{paddingVertical: 0, fontSize: 15}} />
-                                    </Item>
-                                </Row>
-                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbZero}}>
-                                    <Item style={{width: '100%'}}>
-                                        <Icon name='bus' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
-                                        <Input placeholder='Jumlah Kursi (Max 3)' onChangeText={onSetTotalSeat} style={{paddingVertical: 0, fontSize: 15}} />
-                                    </Item>
-                                </Row>
-                                <Row style={{width: '100%', ...Spacing.ptOne, ...Spacing.pbSix}}>
-                                    <Item style={{width: '100%'}}>
-                                        <Icon name='calendar' style={{...Spacing.pxThree, ...Spacing.pyZero, ...Font.fsFive, ...Color.secondary}} />
-                                        <DatePicker
-                                            placeholder='Select Date'
-                                            style={{width: 200, marginTop: 10}}
-                                            date={filter.date}
-                                            minDate={new Date()}
-                                            mode="date"
-                                            format="DD-MM-YYYY"
-                                            confirmBtnText="Confirm"
-                                            cancelBtnText="Cancel"
-                                            onDateChange={(date) => onSetDate(date)}
-                                            showIcon={false}
+            <Content padder>
+                <Card>
+                    <CardItem>
+                        <Body>
+                            <Row style={{width: '100%', ...spacing.pt_10, ...spacing.pb_0}}>
+                                <Item style={{width: '100%'}}>
+                                    <Icon name='map-marker' style={{...spacing.px_20, ...spacing.py_0, ...font.fs_20, ...color.secondary}} />
+                                    <Input placeholder='Masukan Asal' onChangeText={onSetDeparture} style={{...spacing.py_0, ...font.fs_15}} />
+                                </Item>
+                            </Row>
+                            <Row style={{width: '100%', ...spacing.pt_10, ...spacing.pb_0}}>
+                                <Item style={{width: '100%'}}>
+                                    <Icon name='bus' style={{...spacing.px_20, ...spacing.py_0, ...font.fs_20, ...color.secondary}} />
+                                    <Input placeholder='Masukan Tujuan' onChangeText={onSetArrival} style={{...spacing.py_0, ...font.fs_15}} />
+                                </Item>
+                            </Row>
+                            <Row style={{width: '100%', ...spacing.pt_10, ...spacing.pb_20}}>
+                                <Item style={{width: '100%'}}>
+                                    <Icon name='calendar' style={{...spacing.px_20, ...spacing.py_0, ...font.fs_25, ...color.secondary}} />
+                                    <DatePicker
+                                        placeholder='Pilih Tanggal'
+                                        style={{width: 200, ...spacing.mt_10}}
+                                        date={filter.date}
+                                        minDate={new Date()}
+                                        mode="date"
+                                        format="DD-MM-YYYY"
+                                        confirmBtnText="Confirm"
+                                        cancelBtnText="Cancel"
+                                        onDateChange={(date) => onSetDate(date)}
+                                        showIcon={false}
 
-                                            customStyles={{
-                                                dateInput: {
-                                                    fontSize: 20,
-                                                    marginLeft: -115,
-                                                    marginTop: -10,
-                                                    borderWidth: 0
-                                                }
-                                            }}
-                                        />
-                                    </Item>
-                                </Row>
-                            </Body>
-                        </CardItem>
-                    </Card>
-                </Grid>
-                <Grid style={{alignSelf: 'center', ...Spacing.pxThree, ...Spacing.pyZero}}>
-                    <Row style={{...Spacing.pxZero, ...Spacing.pyFive}}>
-                        <Button onPress={onSearchShuttle} style={{width: '100%', borderRadius: 3, ...Color.bgPrimary}} block>
-                            <Text style={{width: '100%', textAlign: 'center', ...Font.fsThree, ...Font.fStyleLight, ...Color.light}}>
-                                Search
-                            </Text>
-                        </Button>
-                    </Row>
-                    <Row style={{justifyContent: 'center'}}>
-                        <Text style={{...Color.primary, fontStyle: 'italic'}}>
-                            {
-                                error
-                            }
-                        </Text>
-                    </Row>
-                </Grid>
+                                        customStyles={{
+                                            dateInput: {
+                                                fontSize: 20,
+                                                marginLeft: -115,
+                                                marginTop: -10,
+                                                borderWidth: 0
+                                            }
+                                        }}
+                                    />
+                                </Item>
+                            </Row>
+                            <Row style={{justifyContent: 'center', alignSelf: 'center', ...spacing.p_0}}>
+                                <Text style={{...color.danger, ...font.fst_italic}}>
+                                    {
+                                        error
+                                    }
+                                </Text>
+                            </Row>
+                            <Row style={{...spacing.pt_10}}>
+                                <Button onPress={onSearchShuttle} block style={{width: '100%', ...color.bg_primary}} >
+                                    <Text style={{width: '100%', textAlign: 'center', ...font.fs_15, ...font.fw_light, ...color.light}}>
+                                        Search
+                                    </Text>
+                                </Button>
+                            </Row>
+                        </Body>
+                    </CardItem>
+                </Card>
             </Content>
         </Container>
     )
